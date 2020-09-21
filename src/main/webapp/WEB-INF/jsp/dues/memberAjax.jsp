@@ -1,0 +1,37 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
+	<table class="table">
+		<c:forEach items="${yearList}" var="year">
+			<tr>
+				<th>${year}</th>	
+				<th><span id="total"></span></th>
+			</tr>	
+			<c:set var="amountYearly" value="0"/>
+			<c:forEach items="${monthList}" var="month">
+				<c:if test="${fn:substring(month, 0, 5) == year}">
+					<c:set var="mm" value="${fn:substring(month, 5, 8)}"/>
+					<c:forEach items="${duesList}" var="dues">
+						<c:set var="duesYear" value="${fn:substring(dues.time, 0, 4)}년"/>
+						<c:set var="duesMonth" value="${fn:substring(dues.time, 5, 7)}월"/>
+						<c:if test="${duesYear == year && mm == duesMonth}">
+							<c:set var="amountMonthly" value="${amountMonthly + dues.amount}"/>
+							<c:set var="amountYearly" value="${amountYearly + dues.amount}"/>
+						</c:if>
+					</c:forEach>
+				</c:if>
+				<tr>
+					<td>${fn:substring(month, 5, 8)}</td>
+					<td>${amountMonthly}원</td>		<!--  ${amountYearly} 왜 안되지? -->
+				</tr>
+			</c:forEach>
+		</c:forEach>
+	</table>
+	
+	<script>
+		$(document).ready(function(){
+			$('#totalAmount').html(${totalAmount}); 
+		})
+	</script>

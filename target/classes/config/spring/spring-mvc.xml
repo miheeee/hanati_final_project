@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:mvc="http://www.springframework.org/schema/mvc"
+    xmlns:context="http://www.springframework.org/schema/context"
+    xmlns:tx="http://www.springframework.org/schema/tx"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:task="http://www.springframework.org/schema/task"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans  
+    http://www.springframework.org/schema/beans/spring-beans.xsd
+    http://www.springframework.org/schema/context   
+    http://www.springframework.org/schema/context/spring-context.xsd
+    http://www.springframework.org/schema/mvc
+    http://www.springframework.org/schema/mvc/spring-mvc.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx.xsd
+    http://www.springframework.org/schema/task
+    http://www.springframework.org/schema/task/spring-task-3.0.xsd ">
+     
+
+	<context:component-scan base-package="kr.ac.kopo" />
+	
+    <mvc:annotation-driven>
+    
+    	<!-- 자바 객체를 제이슨으로 바꿔주기 위한 컨버터 -->
+    	<mvc:message-converters>
+    		<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"> 
+	    		<property name="supportedMediaTypes">	
+	    			<list>
+	    				<value>text/html; charset=utf-8</value>
+	    				<value>application/json; charset=utf-8</value>
+	    			</list>
+	    		</property>
+	    	</bean>
+	    	
+	    	<!-- @ResponseBody 사용할 때 한글이 출력되도록 하기 위해 필요 -->
+    		<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+    			<property name="supportedMediaTypes">	<!-- 세터 주입하기 위함 -->
+    				<list>
+    					<value>text/html; charset=UTF-8</value>
+    				</list>
+    			</property>
+    		</bean>
+    	</mvc:message-converters>
+	</mvc:annotation-driven>
+	
+	<task:annotation-driven />
+	
+	<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource"
+			destroy-method="close">
+			<property name="driverClassName" value="oracle.jdbc.driver.OracleDriver" />
+			<property name="url" value="jdbc:oracle:thin:@localhost:1521:orcl" />
+			<property name="username" value="SYSTEM" />
+			<property name="password" value="0010" />
+	</bean>
+	
+ 	<bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="configLocation" value="classpath:config/mybatis/sqlMapConfig.xml"></property>
+		<property name="mapperLocations" value="classpath:config/sqlmap/oracle/*.xml" />
+	</bean>
+	
+	<bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate">
+		<constructor-arg ref="sqlSessionFactory" />
+	</bean>
+	
+	<mvc:default-servlet-handler />
+	
+	<mvc:view-resolvers>
+		<mvc:jsp prefix="/WEB-INF/jsp/" suffix=".jsp" />
+	</mvc:view-resolvers>
+	
+   <bean class="kr.ac.kopo.interceptor.LoginInterceptor" id="loginInterceptor" />
+   <mvc:interceptors>
+      <mvc:interceptor>
+         <!-- <mvc:mapping path="/board" /> -->
+         <!-- <mvc:mapping path="/board/*" /> -->
+         <mvc:mapping path="/**/" />                  <!-- '/' 뒤에 depth가 몇이던 간에 -->
+         <mvc:exclude-mapping path="/login" />
+         <mvc:exclude-mapping path="/logout" />
+         <mvc:exclude-mapping path="/resources/**" />
+         <mvc:exclude-mapping path="/participant/invite/*" />
+         <ref bean="loginInterceptor" />
+      </mvc:interceptor>
+   </mvc:interceptors>	
+	
+	
+	
+	<!-- 트랜잭션 처리 -->
+	<bean class="org.springframework.jdbc.datasource.DataSourceTransactionManager" 
+			id="transactionManager">
+			<property name="dataSource" ref="dataSource" />
+	</bean>
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	
+	<!-- <bean class="org.springframework.mock.web.MockServletContext"/> -->
+</beans>
+
+
+
+
+<!-- 	<mvc:view-controller path="/file/uploadForm.do" view-name="file/fileUploadForm" />
+	<bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver"
+			id="multipartResolver">
+			<property name="maxUploadSize" value="10485760" />
+	</bean> -->
