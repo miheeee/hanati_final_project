@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="scheduledEnd.dao.ScheduledEndDAO">
+	<resultMap type="scheduledEndVO" id="scheduledEndMap">
+		<result column="account_no" property="accountNo" />
+		<result column="end_date" property="endDate" />
+	</resultMap>
+	
+	<!-- 모임통장 종료 내역에 해당 계좌번호의 목록이 있는지 조회 -->
+	<select id="selectIfExist" resultType="scheduledEndVO" parameterType="gatheringVO">
+		select account_no as accountNo, to_char(end_date, 'yyyy.mm.dd') as endDate
+			from scheduled_end
+				where account_no = #{accountNo}
+	</select>
+	
+	<!-- 모임통장 사용 종료 신청 -->
+	<insert id="insertScheduledEnd" parameterType="gatheringVO">
+		insert into scheduled_end
+			values(#{accountNo}, sysdate+3)
+	</insert>
+	
+	<!-- 모임통장 사용 종료 취소 -->
+	<delete id="deleteScheduledEnd" parameterType="gatheringVO">
+		delete from scheduled_end
+			where account_no = #{accountNo}
+	</delete>
+
+	<!-- 오늘 기준 이전 end_date를 가진 모임통장 모두 종료 예정 내역 삭제 -->
+	<delete id="deleteSchedule">
+		delete from scheduled_end
+		where TO_CHAR(end_date,'YY/MM/DD') <![CDATA[ <= ]]> TO_CHAR(SYSDATE,'YY/MM/DD')
+	</delete>
+</mapper>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="member.dao.MemberDAO">
+	
+	<!-- 로그인 정보 일치 여부 확인 -->
+	<select id="login" parameterType="memberVO" resultType="memberVO">
+		select id, password, name
+		from member
+		where id = #{id} and password = #{password}
+	</select>
+	
+	<!-- 아이디로 회원 정보 조회 -->
+	<select id="selectById" parameterType="memberVO" resultType="memberVO">
+		select name
+		from member
+		where id = #{id}
+	</select>
+	
+	
+	
+	<!-- 스케쥴러 -->
+	
+	<!-- 모임통장 종료 스케쥴 -->
+	
+	<!-- 오늘 종료 예정인 모임통장의 모임원 id에 맞는 전화번호 알아오기 -->
+	<!-- 모든 모임원에게 알림을 할 지 모임통장 변경 알림을 설정한 모임원에게만 알림을 할 지는 고민되지만, 일단 알림 설정을 한 모임원에게만 -->
+	<select id="memberTodayTerminateDate" resultType="memberVO">
+		select tel, id 
+			from member 
+			where id in 
+					(select id 
+						from participant 
+						where account_change = 'Y' 
+							and account_no in 
+								(select account_no 
+									from scheduled_end
+									where TO_CHAR(end_date,'YY/MM/DD') 
+										<![CDATA[ <= ]]> 
+											TO_CHAR(SYSDATE,'YY/MM/DD')))
+	</select>		
+	
+	<!-- 회비 임금일 알림 스케줄 -->
+	<select id="memberTodayDepositDate" resultType="memberVO">
+		select tel, id 
+		from member 
+		where id in 
+				(select id
+					from Scheduled_deposit_date 
+						where regular_day = to_number(to_char(sysdate, 'dd')))
+	</select>
+</mapper>
