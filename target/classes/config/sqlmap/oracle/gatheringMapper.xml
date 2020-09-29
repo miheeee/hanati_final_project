@@ -46,7 +46,19 @@
 				where id = #{id}
 	</select>
 	
+	<!-- 출금 -->
+	<update id="withdraw" parameterType="transactionVO">
+		update gathering
+			set balance = balance - #{ amount }
+				where account_no = #{ accountNo }
+	</update>
 	
+	<!-- 입금 -->
+	<update id="deposit" parameterType="transactionVO">
+		update gathering
+			set balance = balance + #{ amount }
+				where account_no = #{ accountNo }
+	</update>
 	
 	<!-- 스케쥴러 -->
 	

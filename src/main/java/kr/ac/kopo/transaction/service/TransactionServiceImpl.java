@@ -7,7 +7,9 @@ import org.springframework.stereotype.Service;
 
 import kr.ac.kopo.account.dao.AccountDAO;
 import kr.ac.kopo.account.vo.AccountVO;
+import kr.ac.kopo.gathering.dao.GatheringDAO;
 import kr.ac.kopo.gathering.vo.GatheringVO;
+import kr.ac.kopo.notify.service.NotifyService;
 import kr.ac.kopo.participant.dao.ParticipantDAO;
 import kr.ac.kopo.participant.vo.ParticipantVO;
 import kr.ac.kopo.transaction.dao.TransactionDAO;
@@ -26,6 +28,9 @@ public class TransactionServiceImpl implements TransactionService{
 	private ParticipantDAO participantDAO;
 	
 	@Autowired
+	private GatheringDAO gatheringDAO;
+	
+	@Autowired
 	private AccountVO fromAccount;
 	
 	@Autowired
@@ -37,12 +42,16 @@ public class TransactionServiceImpl implements TransactionService{
 	@Autowired
 	private ParticipantVO participantVO;
 	
+	@Autowired
+	private NotifyService notifyService;
+	
 	//이체
 	@Override
 	public void transfer(TransactionVO fromTransaction) {
 
 		//출금은 공통
 		accountDAO.withdraw(fromTransaction);
+		gatheringDAO.withdraw(fromTransaction);
 		
 		//거래내역 삽입을 위해 출금 계좌 정보 알아오기(소유주이름, 잔액)
 		fromAccount.setAccountNo(fromTransaction.getAccountNo());
@@ -74,6 +83,7 @@ public class TransactionServiceImpl implements TransactionService{
 			toTransaction.setAccountNo(fromTransaction.getCounterpartAccountNo());
 			toTransaction.setAmount(fromTransaction.getAmount());
 			accountDAO.deposit(toTransaction);
+			gatheringDAO.deposit(toTransaction);
 			
 			//입금 거래내역 삽입을 위해 입금 계좌 정보 알아오기(소유주이름, 잔액)
 			toAccount.setAccountNo(toTransaction.getAccountNo());
@@ -104,11 +114,9 @@ public class TransactionServiceImpl implements TransactionService{
 			//계좌번호에 맞는 모임원 목록을 가져온다. DB에서 해결하려 했으나
 			//indication에 name이 포함되어있는지 여부는 판단할 수 없었음
 			List<ParticipantVO> participantList = participantDAO.selectByAccountNo(toTransaction);
-			System.out.println("서비스"+toTransaction);
 			for(ParticipantVO participantVO:participantList) {
 				if( toTransaction.getIndication() != null
 						&& toTransaction.getIndication().contains(participantVO.getName())) {
-					System.out.println("들어왔다");
 					toTransaction.setPaidMember(participantVO.getName());
 				}else if( toTransaction.getIndication() == null && 
 						toTransaction.getCounterpart().equals(participantVO.getName())) {
@@ -125,7 +133,7 @@ public class TransactionServiceImpl implements TransactionService{
 			
 			transactionDAO.insertDetails(toTransaction);
 			//입금 알림
-//			notifyService.transferNoti(transactionNo2);
+			notifyService.transferNoti(transactionNo2);
 		}
 	}
 	
@@ -143,20 +151,21 @@ public class TransactionServiceImpl implements TransactionService{
 
 	@Override	//기간별 회비 입금 내역 조회
 	public List<TransactionVO> selectDuesByPeriod(TransactionVO transactionVO) {
-		System.out.println("호출 됐나?");
-		
+
 		List<TransactionVO> transactionList;
 		
 		if(transactionVO.getTime().length() > 6) {
 			//월간
 			System.out.println("월간");
-			if(transactionVO.getTime().charAt(5) != '0') {
-				String[] arr = transactionVO.getTime().split(" ");
-				transactionVO.setTime(arr[0] + " 0" +arr[1]);
-				System.out.println(transactionVO.getTime());
-				//arr[0] + arr[1];
-				//transactionVO.getTime().substring(0, 5) + Character.toString(ch) + transactionVO.getTime().substring(7);
-			}
+			System.out.println(transactionVO.getTime());
+			
+//			if(transactionVO.getTime().charAt(5) != '0') {
+//				String[] arr = transactionVO.getTime().split(" ");
+//				transactionVO.setTime(arr[0] + " 0" +arr[1]);
+//				System.out.println(transactionVO.getTime());
+//				//arr[0] + arr[1];
+//				//transactionVO.getTime().substring(0, 5) + Character.toString(ch) + transactionVO.getTime().substring(7);
+//			}
 			transactionList = transactionDAO.selectDuesByMonthly(transactionVO);
 		}else {
 			//연간

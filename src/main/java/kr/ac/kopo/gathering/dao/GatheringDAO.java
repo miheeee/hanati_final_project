@@ -4,6 +4,7 @@ import java.util.List;
 
 import kr.ac.kopo.gathering.vo.GatheringVO;
 import kr.ac.kopo.member.vo.MemberVO;
+import kr.ac.kopo.transaction.vo.TransactionVO;
 
 public interface GatheringDAO {
 
@@ -44,4 +45,14 @@ public interface GatheringDAO {
 	 * 오늘 회비 입금일인 모임통장의 정보 알아오기(별칭, 안심계좌번호)
 	 */
 	public List<GatheringVO> accountTodayDepositDate();
+	
+	/**
+	 * 출금
+	 */
+	public void withdraw(TransactionVO transactionVO);
+	
+	/**
+	 * 입금
+	 */
+	public void deposit(TransactionVO transactionVO);
 }

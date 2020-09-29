@@ -33,6 +33,10 @@
 				= (select account_no
 					from gathering
 						where safe_account_no = #{safeAccountNo})
+			and to_char(time,'yyyy/mm/dd hh:mi:ss') <![CDATA[ >= ]]> 
+							(select to_char(register_date,'yyyy/mm/dd hh:mi:ss') 
+								from participant
+									where account_no = #{accountNo} and id = #{id})
 	order by time desc
 	</select>
 	
@@ -45,7 +49,11 @@
 				account_no 
 					= (select account_no
 						from gathering
-							where safe_account_no = #{safeAccountNo})
+							where safe_account_no = #{safeAccountNo}) and
+					to_char(time,'yyyy/mm/dd hh:mi:ss') <![CDATA[ >= ]]> 
+						(select to_char(register_date,'yyyy/mm/dd hh:mi:ss') 
+							from participant
+								where account_no = #{accountNo} and id = #{id})	
 	order by time desc
 	</select>
 	
@@ -66,7 +74,7 @@
 			counterpart, paid_member as paidMember
 		from transaction
 		where account_no = #{accountNo} and paid_member is not null 
-			and to_char(time, 'yyyy')||'년 ' = #{time}
+			and to_char(time, 'yyyy')||'년' = #{time}
 		order by time desc, counterpart asc 
 	</select>
 	

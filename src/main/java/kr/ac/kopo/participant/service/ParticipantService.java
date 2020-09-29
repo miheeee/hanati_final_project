@@ -58,7 +58,7 @@ public interface ParticipantService {
 	public GatheringVO joinProcess(ParticipantVO participantVO);
 
 	/**
-	 * 멤버 삭제
+	 * 멤버 삭제 (삭제 후 에이쟉스로 새로 뿌려주기 위해 모임원 다시 가져오기)
 	 */
-	public void deleteParticipant(ParticipantVO participantVO);
+	public List<ParticipantVO> deleteParticipant(ParticipantVO participantVO);
 }

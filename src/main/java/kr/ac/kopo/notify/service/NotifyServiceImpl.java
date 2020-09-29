@@ -97,7 +97,7 @@ public class NotifyServiceImpl implements NotifyService{
 		for(MemberVO memberVO : memberList) {
 			System.out.println(memberVO.getTel());
 			System.out.println(msg);
-			//smsSender.send(memberVO.getTel(), msg);
+			smsSender.send(memberVO.getTel(), msg);
 		}
 		
 	}

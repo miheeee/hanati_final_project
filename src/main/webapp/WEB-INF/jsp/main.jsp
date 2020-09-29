@@ -48,12 +48,12 @@
 	              	<div class="mb-3">	
 		              	<span class="text-center pb-4 mr-0" style="max-width:25%">
 			              	<img src="${ pageContext.request.contextPath }/resources/img/tag/${gathering.tagS}.svg" style="max-width:25%;height:auto;display:inline;">
-			            </span>							
-		             	<c:if test="${tagL != 0}">
+			            </span>				
+		             	<c:if test="${gathering.tagL > 0}">		<!-- numeric 데이터 타입은 설정해주지 않아도 default값이 0 -->
 		             		<span class="text-center pb-4 mr-0">
-	              			<img src="${ pageContext.request.contextPath }/resources/img/tag/${gathering.tagL}.svg" style="max-width:25%;height:auto;display:inline;">	             	
+	              			<img src="${ pageContext.request.contextPath }/resources/img/tag/${gathering.tagL}.svg" style="max-width:25%;height:auto;display:inline;">         	
 		             		</span>
-		             	</c:if>		           
+			             </c:if>	           
 		             </div>
 		             <div class="media-body">
 		              
@@ -61,7 +61,7 @@
 		                	<c:when test="${gathering.id == loginVO.id}">
 		                		<h3 class="mt-0 text-black">${gathering.name} ★</h3> 
 		                		<p>${fn:substring(gathering.accountNo, 0, 3)}-${fn:substring(gathering.accountNo, 3, 9)}-${fn:substring(gathering.accountNo, 9, 14)}</p>
-		                		<h3 class="mt-0 text-black">${gathering.balance}원</h3>
+		                		<h3 class="mt-0 text-black"><fmt:formatNumber value="${gathering.balance}" pattern="#,###.##" />원</h3>
 		                		<a href="${ pageContext.request.contextPath }/transaction/transfer/${gathering.safeAccountNo}" class="btn btn-outline-primary btn-sm">이체</a>
 		                	</c:when>
 		                	<c:otherwise>

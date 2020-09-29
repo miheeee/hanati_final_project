@@ -1,6 +1,10 @@
 package kr.ac.kopo.participant.controller;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -25,6 +29,7 @@ import kr.ac.kopo.member.vo.MemberVO;
 import kr.ac.kopo.participant.service.ParticipantService;
 import kr.ac.kopo.participant.vo.ParticipantVO;
 import kr.ac.kopo.scheduledDepositDate.vo.ScheduledDepositDateVO;
+import kr.ac.kopo.transaction.vo.TransactionVO;
 import oracle.jdbc.proxy.annotation.Post;
 
 @Controller
@@ -118,7 +123,7 @@ public class ParticipantController {
 		authenticationVO.setAuthenticationNum(code.substring(11, 15));
 		
 		participantService.saveAuthenticationNum(authenticationVO);	
-		
+
 		return "redirect:/gathering/detail/" + code.substring(0, 11);
 	}
 	
@@ -190,16 +195,18 @@ public class ParticipantController {
 	
 	
 	//멤버 내보내기
-	@ResponseBody
 	@PostMapping("/participant/expel")
-	public void expel(ParticipantVO participantVO, String safeAccountNo) {
+	public String expel(ParticipantVO participantVO, Model model) {
 		
-		participantService.deleteParticipant(participantVO);
+		List<ParticipantVO> participantList = participantService.deleteParticipant(participantVO);
 //		gatheringVO = participantService.expel(participantVO);
 //		String safeAccountNo = gatheringVO.getSafeAccountNo();
-//		System.out.println("안녕");
 //		return "redirect:/gathering/detail/" + safeAccountNo;
-	}
+		model.addAttribute("participantList", participantList);
+	
+		return "/participant/participantsListAjax";
+	}	
+	
 	
 //	//모임원 목록 조회
 //	@PostMapping("/participant/select")

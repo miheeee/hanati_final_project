@@ -38,7 +38,7 @@
 	
 	<!-- 계좌번호로 모임원 정보 조회 -->
 	<select id="selectByAccountNo" resultType="participantVO" parameterType="transactionVO"> 
-	select name
+	select name, type
 			from participant
 				where account_no = #{accountNo}
 	</select>

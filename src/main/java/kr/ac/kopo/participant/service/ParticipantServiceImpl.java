@@ -55,6 +55,9 @@ public class ParticipantServiceImpl implements ParticipantService{
 	@Autowired
 	private MemberVO memberVO;
 	
+	@Autowired
+	private TransactionVO transactionVO;
+	
 	//safeAccountNo로 모임원 정보 조회
 	@Override
 	public List<ParticipantVO> selectParticipantsBySafeAccountNo(GatheringVO gatheringVO) {
@@ -137,9 +140,16 @@ public class ParticipantServiceImpl implements ParticipantService{
 		return gatheringVO;
 	}
 
-	@Override	//멤버 삭제
-	public void deleteParticipant(ParticipantVO participantVO) {
+	@Override	//멤버 내보내기
+	public List<ParticipantVO> deleteParticipant(ParticipantVO participantVO) {
+		
+		//멤버 삭제
 		participantDAO.deleteParticipant(participantVO);
+		
+		//계좌번호로 모임원 정보 조회 
+		transactionVO.setAccountNo(participantVO.getAccountNo());
+		List<ParticipantVO> participantList = participantDAO.selectByAccountNo(transactionVO);
+		return participantList;
 	}
 	
 	

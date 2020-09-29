@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import kr.ac.kopo.gathering.vo.GatheringVO;
 import kr.ac.kopo.member.vo.MemberVO;
+import kr.ac.kopo.transaction.vo.TransactionVO;
 
 @Repository
 public class GatheringDAOImpl implements GatheringDAO{
@@ -74,6 +75,15 @@ public class GatheringDAOImpl implements GatheringDAO{
 		return gatheringList;
 	}
 
-	
+	@Override	//출금
+	public void withdraw(TransactionVO transactionVO) {
+		sqlSession.update("gathering.dao.GatheringDAO.withdraw", transactionVO);	
+	}
+
+	@Override	//입금
+	public void deposit(TransactionVO transactionVO) {
+		sqlSession.update("gathering.dao.GatheringDAO.deposit", transactionVO);
+		
+	}
 	
 }

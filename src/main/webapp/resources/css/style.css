@@ -4,7 +4,7 @@ body {
    /* font-family: '돋움', dotum, '굴림', gulim, sans-serif; */
   font-family: "NotoSans_Regular", sans-serif; 
  /*  font-family: 'Aktiv Grotesk','Noto Sans KR','Malgun Gothic','돋움',Dotum,'굴림',Gulim,Tahoma,Verdana,Geneva,sans-serif,Apple Gothic,AppleGothic; */
-  font-weight: 300;
+/*   font-weight: 300; */
   font-size: 16px;
   line-height: 1.8;
   color: #6c757d; }
@@ -755,52 +755,96 @@ header {
     font-family: 'NotoSans_Regular';
 }
 /**********하나은행꺼 보고 내가 만들어 본 것************/
-tbody .tr{
-	border-left: 1px solid #ddd;
-    border-top: 1px solid #ddd;
-    padding: 15px 20px;
-    text-align: center;
-    color: #6e7277;
-    font-size: 16px;
-	color: #3c3c3c;
+
+/*             테이블                    */
+
+.hTable{
+    font-family: NotoSans_Regular;
+    font-weight: normal;
+   	text-align: center;
+   	background-color: transparent;
+	width: 100%;
+  	margin-bottom: 1rem;
+    border-top : 2px solid #777;
+    border-bottom: 1px solid #999;  
 }
 
-thead .th{
+.hBody td{
+    font-family: NotoSans_Regular;
+    font-weight: normal;
+	font-style: normal;
+    font-size: 17px;
+	border: 0;
+	border-left: 1px solid #ddd;
+    border-top:1px solid #dee2e6;
+	padding: 15px 20px;
+    text-align: center;
+	color: #222a3b;
+    vertical-align: top;
+/*     color: #6e7277;
+	color: #3c3c3c; */
+}
+
+.hHead th{
+    font-family: NotoSans_Regular;
+	font-style: normal;
+	font-size: 16px;
 	text-align: center;
-		font-size: 16px;
     color: #222a3b;
     background-color: #f6f6f6;
-    border-left: 1px solid #ddd;
-    padding: 22px 10px;
-    height: auto
     border: 0;
-    line-height: 1
+    border-top:1px solid #dee2e6;
+    border-left: 1px solid #ddd;
+	padding: 22px 10px;
+    height: auto;   
+    line-height: 1;
+    vertical-align: bottom;
 }
+.hHead th:first-child, .hBody td:first-child{
+    border-left: none;
+}
+
 .table-title{
-	padding-top: 5px;
-	font-size: 21px;		/*h3*/
-	line-height: 1;
 	font-family: "NotoSans_Medium" !important;
+	font-size: 21px;		/*h3*/
+	font-weight: bold;
+	letter-spacing: normal;
+	color:#3c3c3c;
+	line-height: 1;
     height: 32px;
+	padding-top: 5px;
     margin-bottom: 15px;
     margin: 10px 0 20px;
+
 }
-.table{
+
+.table td, .table p{
+	font-size: 16px;
+    color: #222a3b;
+}
+
+.table td:last-child{
+	border-bottom: 1px solid #dee2e6;
+}
+
+/* .table{
 	margin-bottom: 70px;
 	text-align: center;
-/* border-collapse: collapse;
+border-collapse: collapse;
  	border-color: #ddd; 
     border: 1px solid #dee2e6;
     border-left-width: 1px;
     border-left-style: solid;
-    border-left-color: rgb(222, 226, 230); */
+    border-left-color: rgb(222, 226, 230);
     border-left : 1px solid #fff;
     border-right : 1px solid #fff;
     border-top : 2px solid #777;
     border-bottom: 1px solid #999;
    
 
-}
+} */
+
+
 h3{
     font-size: 21px;
     font-family: 'NotoSans_Dl';
@@ -808,6 +852,185 @@ h3{
 }
 h5{
 	padding-top: 5px;
-	    margin-bottom: 15px;
+	margin-bottom: 15px;
     margin: 10px 0 20px;	
 }
+
+/*         상세페이지 탭            */
+#DetailtabWrap{
+/* 	width: 100%; */
+	margin-left: auto;
+  	margin-right: auto;
+    float: center;
+
+}
+.Detailtabul{
+	display:table;
+	width: 720px;
+	justify-content: center;
+	padding: 0px;
+	height: 60px;
+	text-align: center;
+	background-color: #ffffff;
+	vertical-align: middle;
+	font-size: 18px;
+    color: #6e7277;
+    letter-spacing: 1px;
+    margin-left: auto;
+    margin-right: auto;
+
+/*    line-height: 70px;
+ 	table-layout: fixed; */
+}
+
+.Detailtabli{
+	display:table-cell;
+    vertical-align: middle;
+    text-align: center;
+    background-color: #ffffff;
+}
+
+.Detailtabli a{
+	display: block;
+    font-size: 18px;
+    color: #6e7277;
+    line-height: 60px;
+    padding: 0 !important;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* .Detailtabli a:active{
+	display: block;
+    font-size: 18px;
+    color: #6e7277;
+    line-height: 70px;
+    padding: 0 !important;
+    text-decoration: none;
+} */
+
+
+#li0{
+	border-bottom: 7px solid #ff9800;
+}
+.li0on, .li0on a{
+    background: #ff9800;
+   	color: #ffffff;
+} 
+
+#li1{
+	border-bottom: 7px solid #f25871;
+}
+.li1on, .li1on a{
+    background: #f25871;
+    color: #ffffff;
+} 
+
+#li2{
+	border-bottom: 7px solid #925fc0;
+}
+.li2on, .li2on a{
+    background: #925fc0;
+    color: #ffffff;
+} 
+
+#li3{
+	border-bottom: 7px solid #3498db;
+}
+.li3on, .li3on a{
+    background: #3498db;
+    color: #ffffff;
+} 
+
+/*         엑셀 다운로드 버튼            */
+.excelDownBtn{ 
+	height: 100%;
+	float: right;
+	background-color: #ffffff;
+	border-color: #ffffff;
+	border: 0;
+	outline: 0;
+  	color: black;
+  	font-size: 14px;
+  	padding-left: 0;
+  	cursor: pointer;
+}
+
+
+/*        회비내역 탭           */
+.dues-tabs li{
+	width: 50%;
+	text-align: center;
+    font-weight: bold;
+	font-size: 18px;
+}
+
+.dues-tabs li a{
+	padding-top: 15px;
+	padding-bottom: 15px;
+}
+
+
+/*        회비내역 기간 select      */
+ #periodList{
+	background-color: #f6f6f6;
+	border-color: #fff;
+/* 	border-radius: 30px; */
+    font-family: 'NotoSans_Regular';
+	outline: none;
+	-webkit-writing-mode: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	cursor: pointer;
+    outline: none;
+    padding: 15px;
+    margin-top: 30px;
+    margin-bottom: 20px;
+    padding: 0.7em 14px 0.7em 14px;
+ 
+    letter-spacing: normal;
+    word-spacing: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    text-align: center;
+    white-space: pre;
+    -webkit-rtl-ordering: none;
+    cursor: default;
+}
+
+/*          메세지카드 보내기 버튼              */
+.sendMessageBtn{
+    position: relative;
+    display: inline-block;
+    padding: 0 35px 0 20px;
+    border: 1px solid #27b2a5;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 31px;
+    color: #27b2a5;
+    text-decoration: none;
+    vertical-align: middle;
+	background-color: #fff;
+}
+.sendMessageBtn:hover{
+	background-color: #f4f9f9;
+    border: 1px solid #a9e1db;
+}
+
+
+/* #periodList option{
+  outline: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  height: 100px;
+	padding: 100px;
+	
+	
+	padding: 0px 50px 50px;
+	font-weight: normal;
+    display: block;
+    white-space: pre;
+    height: 100px;
+
+} */

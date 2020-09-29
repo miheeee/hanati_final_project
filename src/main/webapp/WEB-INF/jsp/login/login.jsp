@@ -51,18 +51,6 @@
         </div>
       </div>
     </section>
-    
-
-
-    <section class="container cta-overlap">
-      <div class="text d-flex">
-        <h2 class="h3">Contact Us For Projects or Need a Quotations</h2>
-        <div class="ml-auto btn-wrap">
-          <a href="get-quote.html" class="btn-cta btn btn-outline-white">Get A Quote</a>
-        </div>
-      </div>
-    </section>
-    <!-- END section -->
 
 	<!-- footer BEGIN -->
 		<jsp:include page="/WEB-INF/jsp/include/footer.jsp" /> 

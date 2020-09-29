@@ -41,12 +41,13 @@ public class SchedulerImpl implements Scheduler{
 	
 	@Autowired
 	private SmsSender smsSender;
-	
+
 	////모임통장 종료 예정 내역에 오늘 포함 이전 날짜가 있는 내역이 있음 삭제  
-	@Scheduled(cron="0 45 17 * * *")
+//	@Scheduled(cron="0 45 12 * * *")
 	@Transactional
 	@Override
 	public void deleteScheduledEnd() {
+		System.out.println("안녕");
 	      try{  
 	    	//알림 (필요한 정보 가져오기)
 				//오늘 종료 예정인 모임통장의 정보 알아오기(별칭, 안심계좌번호)

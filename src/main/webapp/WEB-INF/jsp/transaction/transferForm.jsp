@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -33,20 +35,32 @@
               
 				<div class="row">
 					<div class="col-md-12 form-group">
-						<label for="counterpartBank">받는 분 정보</label>
+						
+						<!-- 어떤 url로 요청이 들어왔는지에 따라 보여주는 형태 달라짐 -->
+						<c:set var="path" value="${requestScope['javax.servlet.forward.servlet_path']}"/> 
+
+						<label for="counterpartBank">받는 분 정보</label>	
+						<select name="counterpartBank" id="counterpartBank" class="form-control form-control-lg">
+							<c:forEach items="${ bankList }" var="bank" varStatus="loop">
+								<c:choose>
+									<c:when test="${bank.code == '081'}">
+										<option value="${ bank.code }" selected="selected">${ bank.codeName }</option>
+									</c:when>
+									<c:otherwise>
+										<option value="${ bank.code }">${ bank.codeName }</option>
+									</c:otherwise>
+								</c:choose>
+							</c:forEach>  
+						</select>	
 						
 						<c:choose>	
-							<c:when test="${not empty bankList}">
-								<select name="counterpartBank" id="counterpartBank" class="form-control form-control-lg">
-									<c:forEach items="${ bankList }" var="bank" varStatus="loop">
-										<option value="${ bank.code }">${ bank.codeName }</option>
-									</c:forEach>  
-								</select>
-								<input type="text" name="counterpartAccountNo" placeholder="[-]없이 입력" class="form-control form-control-lg">
-							</c:when>
-							<c:otherwise>
-								<input type="text" name="counterpartBank" value="하나은행" class="form-control form-control-lg">
-								<input type="text" name="counterpartAccountNo" value="${safeAccountNo}" class="form-control form-control-lg">
+						<%-- 회비를 입금하는 경우에는 --%>
+						<c:when test="${fn:substring(path, 0, fn:length(path) - 11) == '/transaction/transfer/dues/'}">
+							<input type="text" name="counterpartAccountNo" value="${safeAccountNo}" class="form-control form-control-lg">			
+						</c:when>
+							<%-- 회비를 입금하는 경우를 제외하고 --%>
+							<c:otherwise>						
+								<input type="text" name="counterpartAccountNo" placeholder="[-]없이 입력" class="form-control form-control-lg">		
 							</c:otherwise>
 						</c:choose>
 						
@@ -64,6 +78,7 @@
 					<div class="col-md-12 form-group banking-cont nothead">
 						<label for="accountNo">출금계좌</label>
 						<select name="accountNo" id="accountNo"  class="form-control form-control-lg">
+							<!-- 일반 입출금 통장 목록 -->
 							<c:forEach items="${ accountList }" var="account" varStatus="loop">
 							  <option value="${ account.accountNo }">
 							 	${ account.accountNo } : 				  				
@@ -71,47 +86,26 @@
 							  	잔액 ${ account.balance }원
 							  </option>
 							</c:forEach>  
-							
+							<!-- 모임주로 있는 모임통장 목록  -->
 							<c:forEach items="${ gatheringList }" var="gathering" varStatus="loop">
 								<c:choose>
-									<c:when test="${not empty bankList}">								
-										
-										<c:choose>									
-											<c:when test="${gathering.safeAccountNo == safeAccountNo}">
-												<option value="${ gathering.accountNo }" selected="selected">
-												  	${ gathering.accountNo } : 
-												  	${ gathering.name } &nbsp;&nbsp;&nbsp;&nbsp;
-												  	잔액 ${ gathering.balance }원
-											  	</option>
-											</c:when>
-											<c:otherwise>
-												<option value="${ gathering.accountNo }">
-												  	${ gathering.accountNo } : 
-												  	${ gathering.name } &nbsp;&nbsp;&nbsp;&nbsp;
-												  	잔액 ${ gathering.balance }원
-											  	</option>
-											</c:otherwise>
-										</c:choose>
-									
+									<c:when test="${fn:substring(path, 0, fn:length(path) - 11) == '/transaction/transfer/' 
+										&&	gathering.safeAccountNo == safeAccountNo}">								
+										<option value="${ gathering.accountNo }" selected="selected">
+										  	${ gathering.accountNo } : 
+										  	${ gathering.name } &nbsp;&nbsp;&nbsp;&nbsp;
+										  	잔액 ${ gathering.balance }원
+									  	</option>
 									</c:when>
 									<c:otherwise>
-									
-										<c:choose>									
-											<c:when test="${gathering.safeAccountNo != safeAccountNo}">
-												<option value="${ gathering.accountNo }">
-												  	${ gathering.accountNo } : 
-												  	${ gathering.name } &nbsp;&nbsp;&nbsp;&nbsp;
-												  	잔액 ${ gathering.balance }원
-											  	</option>
-											</c:when>
-											
-										</c:choose>
-									
-									
-									</c:otherwise>	 
-								</c:choose>		
-							</c:forEach> 
-							
+										<option value="${ gathering.accountNo }">
+										  	${ gathering.accountNo } : 
+										  	${ gathering.name } &nbsp;&nbsp;&nbsp;&nbsp;
+										  	잔액 ${ gathering.balance }원
+									  	</option>
+									</c:otherwise>
+								</c:choose>
+							</c:forEach> 	
 						</select>
                 </div>
               </div>
@@ -272,16 +266,6 @@
     </section>
 --%>
 
-    <section class="container cta-overlap">
-      <div class="text d-flex">
-        <h2 class="h3">Contact Us For Projects or Need a Quotations</h2>
-        <div class="ml-auto btn-wrap">
-          <a href="get-quote.html" class="btn-cta btn btn-outline-white">Get A Quote</a>
-        </div>
-      </div>
-    </section>
-    
-    <!-- END section -->
 
 	<!-- footer BEGIN -->
 		<jsp:include page="/WEB-INF/jsp/include/footer.jsp" /> 

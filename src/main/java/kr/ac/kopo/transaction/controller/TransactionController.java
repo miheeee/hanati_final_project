@@ -1,7 +1,9 @@
 package kr.ac.kopo.transaction.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -51,9 +53,34 @@ public class TransactionController {
 	private GatheringVO gatheringVO;
 	
 	//이체폼
-	//메인 페이지에서 계좌에 있는 버튼을 누를 경우
+	//i)모임주가 모임통장에서 이체할 때
 	@GetMapping("/transaction/transfer/{safeAccountNo}")
-	public ModelAndView transferForm(HttpSession session, @PathVariable String safeAccountNo, HttpServletRequest request) {
+	public ModelAndView transferFormWithdrawFromGathering(HttpSession session, @PathVariable String safeAccountNo, HttpServletRequest request) {
+		
+		MemberVO loginVO = (MemberVO)session.getAttribute("loginVO");
+
+		//모임통장을 제외한 일반 입출금 계좌 조회
+		List<AccountVO> accountList = gatheringService.selectAccountExceptGathering(loginVO);
+	
+		//모임주로 있는 모임통장 정보만 조회
+		List<GatheringVO> gatheringList = gatheringService.selectOwnedGatheringById(loginVO);
+
+		//은행 목록 가져오기
+		List<CodeVO> bankList = codeService.selectBankCode();
+		
+		ModelAndView mav = new ModelAndView("transaction/transferForm");
+		mav.addObject("accountList", accountList);
+		mav.addObject("gatheringList", gatheringList);
+		mav.addObject("bankList", bankList);
+		mav.addObject("safeAccountNo", safeAccountNo);
+		
+		return mav;
+	}
+	
+	//이체폼
+	//ii)네비게이션바의 이체 버튼을 누를 때
+	@GetMapping("/transaction/transfer")
+	public ModelAndView transferForm(HttpSession session) {
 		
 		MemberVO loginVO = (MemberVO)session.getAttribute("loginVO");
 
@@ -63,34 +90,48 @@ public class TransactionController {
 		//모임주로 있는 모임통장 정보만 조회
 		List<GatheringVO> gatheringList = gatheringService.selectOwnedGatheringById(loginVO);
 		
+		//은행 목록 가져오기
+		List<CodeVO> bankList = codeService.selectBankCode();
+		
 		ModelAndView mav = new ModelAndView("transaction/transferForm");
 		mav.addObject("accountList", accountList);
 		mav.addObject("gatheringList", gatheringList);
-		mav.addObject("safeAccountNo", safeAccountNo);
+		mav.addObject("bankList", bankList);
 		
-//		String uri = request.getRequestURI();
-//		uri = uri.substring(request.getContextPath().length());
-		//이전 경로
-		String url = request.getHeader("referer");
-		System.out.println(url);
-		String beforeAddr = url.split("/")[4];
-		if(!beforeAddr.equals("detail")) {	
-			//은행 목록 가져오기
-			List<CodeVO> bankList = codeService.selectBankCode();
-			mav.addObject("bankList", bankList);
-		}
-		mav.addObject("beforeAddr", beforeAddr);
-
 		return mav;
 	}
 	
 	
+	//이체폼
+	//iii)회비 입금을 할 때
+	@GetMapping("/transaction/transfer/dues/{safeAccountNo}")
+	public ModelAndView transferFormForDues(HttpSession session, @PathVariable String safeAccountNo, HttpServletRequest request) {
+		
+		MemberVO loginVO = (MemberVO)session.getAttribute("loginVO");
+
+		//모임통장을 제외한 일반 입출금 계좌 조회
+		List<AccountVO> accountList = gatheringService.selectAccountExceptGathering(loginVO);
+	
+		//모임주로 있는 모임통장 정보만 조회
+		List<GatheringVO> gatheringList = gatheringService.selectOwnedGatheringById(loginVO);
+		
+		//은행 목록 가져오기
+		List<CodeVO> bankList = codeService.selectBankCode();
+		
+		ModelAndView mav = new ModelAndView("transaction/transferForm");
+		mav.addObject("accountList", accountList);
+		mav.addObject("gatheringList", gatheringList);
+		mav.addObject("bankList", bankList);
+		mav.addObject("safeAccountNo", safeAccountNo);
+		
+		return mav;
+	}
+	
+
 	//이체
 	@PostMapping("/transaction/transfer")
 	public String transfer(TransactionVO transactionVO, Model model) {
-		
-		System.out.println("컨트롤러:" + transactionVO);
-		
+
 		transactionService.transfer(transactionVO);
 		gatheringVO = gatheringService.selectByAccountNo(transactionVO.getAccountNo());
 		model.addAttribute("gatheringVO", gatheringVO);
@@ -102,8 +143,6 @@ public class TransactionController {
 	@PostMapping("/dues/period")
 	public String selectDuesByPeriod(TransactionVO transactionVO, Model model) {
 
-		System.out.println("TransactionVO!!!!!!!!!!!");
-		System.out.println(transactionVO);
 		//기간별 회비 입금 내역 조회
 		List<TransactionVO> duesList =  transactionService.selectDuesByPeriod(transactionVO);
 		
@@ -115,7 +154,7 @@ public class TransactionController {
 		return "/dues/periodAjax";
 	}
 	
-	
+	//멤버별 회비 입금 내역 조회
 	@PostMapping("/dues/member")
 	public String duesByMember(ParticipantVO participantVO, Model model) {
 		
@@ -147,4 +186,71 @@ public class TransactionController {
 	
 		return "/dues/memberAjax";
 	}
+	
+	//모임통장 상세정보 - 거래내역 탭
+	@PostMapping("/transaction/list")
+	public String transactionList(GatheringVO gatheringVO, HttpSession session, Model model) {
+		
+		//safeAccountNo로 거래 내역 조회	(참고로 거래내역은 무조건 실제 계좌번호만 DB에 찍히게 하자)
+		MemberVO loginVO = (MemberVO)session.getAttribute("loginVO");
+		gatheringVO.setId(loginVO.getId());		//알림은 각자 설정하는 거기 때문에 모임통장 소유주만 있는 gathering테이블의 id칼럼과는 성격이 다르지만, vo객체를 따로 만드는 게 번거로워서 그냥 담아 보냈다.
+
+		List<TransactionVO> transactionList = transactionService.selectTransBySafeAccountNo(gatheringVO);
+		
+		model.addAttribute("transactionList", transactionList);
+		model.addAttribute("gathering", gatheringVO);
+		return "/transaction/listAjax";
+	}	
+	
+	
+	//모임통장 상세정보 - 회비내역 탭
+	@PostMapping("/dues/list")
+	public String duesList(GatheringVO gatheringVO, HttpSession session, Model model) {
+		
+		MemberVO loginVO = (MemberVO)session.getAttribute("loginVO");
+		gatheringVO.setId(loginVO.getId());
+		
+		//safeAccountNo로 모임원 정보 조회
+		List<ParticipantVO> participantList = participantService.selectParticipantsBySafeAccountNo(gatheringVO);
+		
+		//safeAccountNo로 회비 입금 내역 조회
+		List<TransactionVO> duesList = transactionService.selectDepositedDuesList(gatheringVO);
+		
+		//처음 띄워주는 기간별 입금내역 보여주기 위해
+		//1)가져온 회비 입금 내역에서 기간 추출
+		Set<String> monthSet = new HashSet<String>();
+		for(TransactionVO dues : duesList) {
+			String m = (dues.getTime().substring(5,6).equals("0"))? dues.getTime().substring(6,7) : dues.getTime().substring(5,7);
+			monthSet.add(dues.getTime().substring(0,4) + "년 " + 
+							 m + "월");
+			monthSet.add(dues.getTime().substring(0,4) + "년");
+		}
+		//2)최근순대로 정렬
+		List<String> monthList = new ArrayList<String>(monthSet);		//먼저 set => list로 변환
+		Collections.sort(monthList, Collections.reverseOrder());
+		
+		//처음 띄워주는 멤버벌 입금내역 보여주기 위해
+		//1)가져온 회비 입금 내역에서 기간 추출
+		Set<String> yearSet = new HashSet<String>();
+		for(TransactionVO dues : duesList) {
+			yearSet.add(dues.getTime().substring(0,4) + "년");
+		}	
+		
+		//2)최근순대로 정렬
+		List<String> yearList = new ArrayList<String>(yearSet);		//먼저 set => list로 변환
+		Collections.sort(yearList, Collections.reverseOrder());
+
+		//현재 날짜(년 월)
+		String date = new SimpleDateFormat("yyyy.MM").format(new Date());
+		
+		model.addAttribute("duesList", duesList);
+		model.addAttribute("participantList", participantList);
+		model.addAttribute("monthList", monthList);
+		model.addAttribute("yearList", yearList);
+		model.addAttribute("date", date);
+		model.addAttribute("gathering", gatheringVO);
+		
+		return "/dues/listAjax";
+	}	
+	
 }

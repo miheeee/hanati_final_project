@@ -2,6 +2,7 @@ package kr.ac.kopo.gathering.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
@@ -173,8 +174,56 @@ public class GatheringController {
 		//safeAccountNo로 모임원 정보 조회
 		List<ParticipantVO> participantList = participantService.selectParticipantsBySafeAccountNo(gatheringVO);
 		
-		//safeAccountNo로 거래 내역 조회	(참고로 거래내역은 무조건 실제 계좌번호만 찍히게 하자)
+		//safeAccountNo로 거래 내역 조회	(참고로 거래내역은 무조건 실제 계좌번호만 DB에 찍히게 하자)
+		MemberVO loginVO = (MemberVO)session.getAttribute("loginVO");
+		gatheringVO.setId(loginVO.getId());		//알림은 각자 설정하는 거기 때문에 모임통장 소유주만 있는 gathering테이블의 id칼럼과는 성격이 다르지만, vo객체를 따로 만드는 게 번거로워서 그냥 담아 보냈다.
+		gatheringVO.setAccountNo(gathering.getAccountNo());
+		
 		List<TransactionVO> transactionList = transactionService.selectTransBySafeAccountNo(gatheringVO);
+		
+		//현재 날짜(년 월)
+		String date = new SimpleDateFormat("yyyy.MM").format(new Date());		
+
+		//모임통장 상태(사용/종료 예정) 가져오기
+//		for(ParticipantVO participantVO:participantList) {
+//			//모임통장의 소유주일 때만 가져오기
+//			if(participantVO.getId().equals(loginVO.getId()) && participantVO.getType().equals("301")) {
+				scheduledEndVO = scheduledEndService.selectIfExist(gathering);			
+//			}
+//		}
+	
+		ModelAndView mav = new ModelAndView("gathering/detail");
+		mav.addObject("gathering", gathering);
+		mav.addObject("participantList", participantList);
+		mav.addObject("transactionList", transactionList);
+
+		mav.addObject("date", date);
+		mav.addObject("participantVO", participantVO);
+		mav.addObject("scheduledEndVO", scheduledEndVO);
+		
+		return mav;
+	}
+	
+	
+	//모임 계좌에 대한 상세 정보 페이지
+	@GetMapping("/gathering/detail/{safeAccountNo}")
+	public ModelAndView DetailGathering(@PathVariable("safeAccountNo") String safeAccountNo, HttpSession session) {
+		 
+		gatheringVO.setSafeAccountNo(safeAccountNo);
+		
+		//safeAccountNo로 모임통장 정보 조회
+		GatheringVO gathering = gatheringService.selectGatheringBySafeAccountNo(gatheringVO);
+		
+		//safeAccountNo로 모임원 정보 조회
+		List<ParticipantVO> participantList = participantService.selectParticipantsBySafeAccountNo(gatheringVO);
+
+		//safeAccountNo로 거래 내역 조회	(참고로 거래내역은 무조건 실제 계좌번호만 DB에 찍히게 하자)
+		MemberVO loginVO = (MemberVO)session.getAttribute("loginVO");
+		gatheringVO.setId(loginVO.getId());		//알림은 각자 설정하는 거기 때문에 모임통장 소유주만 있는 gathering테이블의 id칼럼과는 성격이 다르지만, vo객체를 따로 만드는 게 번거로워서 그냥 담아 보냈다.
+		gatheringVO.setAccountNo(gathering.getAccountNo());
+		
+		List<TransactionVO> transactionList = transactionService.selectTransBySafeAccountNo(gatheringVO);
+		
 		
 		//safeAccountNo로 회비 입금 내역 조회
 		List<TransactionVO> duesList = transactionService.selectDepositedDuesList(gatheringVO);
@@ -207,7 +256,6 @@ public class GatheringController {
 		String date = new SimpleDateFormat("yyyy.MM").format(new Date());
 		
 		//알림 설정 상태 보여주기
-		MemberVO loginVO = (MemberVO)session.getAttribute("loginVO");
 		gatheringVO.setId(loginVO.getId());		//알림은 각자 설정하는 거기 때문에 모임통장 소유주만 있는 gathering테이블의 id칼럼과는 성격이 다르지만, vo객체를 따로 만드는 게 번거로워서 그냥 담아 보냈다.
 		participantVO = participantService.selectAllNotifySettings(gatheringVO);
 		
@@ -231,36 +279,66 @@ public class GatheringController {
 		mav.addObject("scheduledEndVO", scheduledEndVO);
 		
 		return mav;
-	}
+	}	
+	
 	
 	//모임통장 사용 종료 신청
-	@ResponseBody
 	@PostMapping("/gathering/terminate")
-	public void terminate(GatheringVO gatheringVO) {
+	public String terminate(GatheringVO gatheringVO, HttpSession session, Model model) {
 		
 		//사용 종료 예정 목록 테이블에 데이터 추가
 		scheduledEndService.terminate(gatheringVO);
+		
 		//종료 예정 알림 보내기
 		notifyService.scheduledTerminate(gatheringVO);
+		
+		//scheduledEndVO.setAccountNo(gatheringVO.getAccountNo());		
+		//DB까지 갔다오지 않고 바로 화면에 뿌려주기 위해 종료 예정일 계산
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(new Date());
+		cal.add(Calendar.DATE, 3);
+		
+		String date = new SimpleDateFormat("yyyy.MM.dd").format(cal.getTime());
+
+		ScheduledEndVO scheduledEndVO = new ScheduledEndVO();
+		scheduledEndVO.setEndDate(date);
+
+		model.addAttribute("gatheringId", gatheringVO.getId());
+		model.addAttribute("scheduledEndVO", scheduledEndVO);
+		return "/gathering/statusAjax";
 	}
 	
 	//모임통장 사용 종료 취소
-	@ResponseBody
 	@PostMapping("/gathering/terminateCancel")
-	public void terminateCancel(GatheringVO gatheringVO) {
+	public String terminateCancel(GatheringVO gatheringVO, Model model) {
 		
 		scheduledEndService.terminateCancel(gatheringVO);
+		
+		model.addAttribute("gatheringId", gatheringVO.getId());
+		scheduledEndVO = null;
+		model.addAttribute("scheduledEndVO", scheduledEndVO);
+		return "/gathering/statusAjax";
 	}
 	
-	//모임통장 상태 reload
-	@ResponseBody
-	@PostMapping("/gathering/gatheringStatus")
-	public void gatheringStatus(GatheringVO gatheringVO) {
+	//모임통장 상세정보 - 모임설정 탭
+	@PostMapping("/gathering/settings")
+	public String gatheringSettings(GatheringVO gatheringVO, HttpSession session, Model model) {
 		
-		scheduledEndVO = scheduledEndService.selectIfExist(gatheringVO);
+		MemberVO loginVO = (MemberVO)session.getAttribute("loginVO");
+		gatheringVO.setId(loginVO.getId());
 		
-		ModelAndView mav = new ModelAndView();
-		mav.addObject("scheduledEndVO", scheduledEndVO);
-//		return scheduledEndVO;
+		//알림 설정 상태 보여주기
+		participantVO = participantService.selectAllNotifySettings(gatheringVO);
+		
+		//모임통장 상태(사용/종료 예정) 가져오기
+		scheduledEndVO = scheduledEndService.selectIfExist(gatheringVO);			
+		
+		//safeAccountNo로 모임통장 정보 조회
+		GatheringVO gathering = gatheringService.selectGatheringBySafeAccountNo(gatheringVO);
+		
+		model.addAttribute("participantVO", participantVO);
+		model.addAttribute("scheduledEndVO", scheduledEndVO);
+		model.addAttribute("gathering", gathering);
+		return "/gathering/settingsAjax";
 	}
 }

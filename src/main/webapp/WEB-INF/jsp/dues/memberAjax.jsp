@@ -2,12 +2,19 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 	<table class="table">
 		<c:forEach items="${yearList}" var="year">
 			<tr>
 				<th>${year}</th>	
-				<th><span id="total"></span></th>
+				<!-- <th><span id="total"></span></th> -->
+				<c:set var="yearlAmount" value='0'/>
+				<c:forEach items="${duesList}" var="dues">
+					<c:if test="${fn:substring(dues.time, 0, 4) == fn:substring(year, 0, 4)}">
+						<c:set var="yearlAmount" value="${yearlAmount + dues.amount}"/>
+					</c:if>
+				</c:forEach>
+				<th>총 <fmt:formatNumber value="${yearlAmount}" pattern="#,###.##" />원</th>	
 			</tr>	
 			<c:set var="amountYearly" value="0"/>
 			<c:forEach items="${monthList}" var="month">
@@ -23,15 +30,15 @@
 					</c:forEach>
 				</c:if>
 				<tr>
-					<td>${fn:substring(month, 5, 8)}</td>
-					<td>${amountMonthly}원</td>		<!--  ${amountYearly} 왜 안되지? -->
+					<td>${ (fn:substring(month, 5, 6) == 0)? fn:substring(month, 6, 7) : fn:substring(month, 5, 7)}월</td>
+					<td><fmt:formatNumber value="${amountMonthly}" pattern="#,###.##" />원</td>		<!--  ${amountYearly} 왜 안되지? -->
 				</tr>
 			</c:forEach>
 		</c:forEach>
 	</table>
 	
 	<script>
-		$(document).ready(function(){
-			$('#totalAmount').html(${totalAmount}); 
-		})
+		$(document).ready(function(){ 
+			$('#totalAmount').html(${totalAmount});  
+		}) 
 	</script>

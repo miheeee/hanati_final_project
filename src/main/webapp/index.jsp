@@ -12,19 +12,18 @@
 <!-- header END -->
     
     <section class="home-slider owl-carousel">
-      <div class="slider-item" style="background-image: url('${ pageContext.request.contextPath }/resources/img/pexels-startup-stock-photos-7095.jpg');">
-        
+    
+      <div class="slider-item" style="background-image: url('${ pageContext.request.contextPath }/resources/img/pexels-startup-stock-photos-7095.jpg');">       
         <div class="container">
           <div class="row slider-text align-items-center justify-content-center text-center">
             <div class="col-md-7 col-sm-12 element-animate">
-              <h1 class="mb-4"> Make One's Invaluable Momemt </h1>
+              <h1 class="mb-4" style="text-shadow: 2px 2px 2px gray;"> Make One's Invaluable Momemt </h1>
               	<c:if test="${empty loginVO}">
               		<p class="mb-0"><a href="#" target="_blank" class="btn btn-primary">회원가입</a></p> 
 				</c:if>
             </div>
           </div>
         </div>
-
       </div>
 
       <div class="slider-item" style="background-image: url('${ pageContext.request.contextPath }/resources/img/nw_bg_main_dollar_200903.jpg');">
@@ -34,8 +33,7 @@
               <h2 class="mb-4 mt-5 pt-5" style="color:black;font-family:'NotoSans_Light';">손님의 기쁨 그 하나를 위한 은행이 되도록 최선을 다하겠습니다.</h2>
             </div>
           </div>
-        </div>
-        
+        </div>     
       </div>
 
     </section>
@@ -260,17 +258,6 @@
         </div>
         <<!-- 콘텐츠 끝 -->
         
-      </div>
-    </section>
-    <!-- END section -->
-
-
-    <section class="container cta-overlap">
-      <div class="text d-flex">
-        <h2 class="h3">Contact Us For Projects or Need a Quotations</h2>
-        <div class="ml-auto btn-wrap">
-          <a href="get-quote.html" class="btn-cta btn btn-outline-white">Get A Quote</a>
-        </div>
       </div>
     </section>
     <!-- END section -->

@@ -100,7 +100,7 @@ public class ParticipantDAOImpl implements ParticipantDAO{
 
 	@Override	//멤버 삭제
 	public void deleteParticipant(ParticipantVO participantVO) {
-		sqlSession.selectList("participant.dao.ParticipantDAO.deleteParticipant", participantVO);	
+		sqlSession.delete("participant.dao.ParticipantDAO.deleteParticipant", participantVO);	
 	}	
 	
 	
