@@ -188,7 +188,7 @@ public class GatheringController {
 //		for(ParticipantVO participantVO:participantList) {
 //			//모임통장의 소유주일 때만 가져오기
 //			if(participantVO.getId().equals(loginVO.getId()) && participantVO.getType().equals("301")) {
-				scheduledEndVO = scheduledEndService.selectIfExist(gathering);			
+//				scheduledEndVO = scheduledEndService.selectIfExist(gathering);			
 //			}
 //		}
 	
@@ -198,8 +198,8 @@ public class GatheringController {
 		mav.addObject("transactionList", transactionList);
 
 		mav.addObject("date", date);
-		mav.addObject("participantVO", participantVO);
-		mav.addObject("scheduledEndVO", scheduledEndVO);
+//		mav.addObject("participantVO", participantVO);
+//		mav.addObject("scheduledEndVO", scheduledEndVO);
 		
 		return mav;
 	}
@@ -222,48 +222,47 @@ public class GatheringController {
 		gatheringVO.setId(loginVO.getId());		//알림은 각자 설정하는 거기 때문에 모임통장 소유주만 있는 gathering테이블의 id칼럼과는 성격이 다르지만, vo객체를 따로 만드는 게 번거로워서 그냥 담아 보냈다.
 		gatheringVO.setAccountNo(gathering.getAccountNo());
 		
-		List<TransactionVO> transactionList = transactionService.selectTransBySafeAccountNo(gatheringVO);
-		
+		List<TransactionVO> transactionList = transactionService.selectTransBySafeAccountNo(gatheringVO);		
 		
 		//safeAccountNo로 회비 입금 내역 조회
-		List<TransactionVO> duesList = transactionService.selectDepositedDuesList(gatheringVO);
+//		List<TransactionVO> duesList = transactionService.selectDepositedDuesList(gatheringVO);
 		
-		//처음 띄워주는 기간별 입금내역 보여주기 위해
-		//1)가져온 회비 입금 내역에서 기간 추출
-		Set<String> monthSet = new HashSet<String>();
-		for(TransactionVO dues : duesList) {
-			String m = (dues.getTime().substring(5,6).equals("0"))? dues.getTime().substring(6,7) : dues.getTime().substring(5,7);
-			monthSet.add(dues.getTime().substring(0,4) + "년 " + 
-							 m + "월");
-			monthSet.add(dues.getTime().substring(0,4) + "년");
-		}
-		//2)최근순대로 정렬
-		List<String> monthList = new ArrayList<String>(monthSet);		//먼저 set => list로 변환
-		Collections.sort(monthList, Collections.reverseOrder());
-		
-		//처음 띄워주는 멤버벌 입금내역 보여주기 위해
-		//1)가져온 회비 입금 내역에서 기간 추출
-		Set<String> yearSet = new HashSet<String>();
-		for(TransactionVO dues : duesList) {
-			yearSet.add(dues.getTime().substring(0,4) + "년");
-		}	
-		
-		//2)최근순대로 정렬
-		List<String> yearList = new ArrayList<String>(yearSet);		//먼저 set => list로 변환
-		Collections.sort(yearList, Collections.reverseOrder());
+//		//처음 띄워주는 기간별 입금내역 보여주기 위해
+//		//1)가져온 회비 입금 내역에서 기간 추출
+//		Set<String> monthSet = new HashSet<String>();
+//		for(TransactionVO dues : duesList) {
+//			String m = (dues.getTime().substring(5,6).equals("0"))? dues.getTime().substring(6,7) : dues.getTime().substring(5,7);
+//			monthSet.add(dues.getTime().substring(0,4) + "년 " + 
+//							 m + "월");
+//			monthSet.add(dues.getTime().substring(0,4) + "년");
+//		}
+//		//2)최근순대로 정렬
+//		List<String> monthList = new ArrayList<String>(monthSet);		//먼저 set => list로 변환
+//		Collections.sort(monthList, Collections.reverseOrder());
+//		
+//		//처음 띄워주는 멤버벌 입금내역 보여주기 위해
+//		//1)가져온 회비 입금 내역에서 기간 추출
+//		Set<String> yearSet = new HashSet<String>();
+//		for(TransactionVO dues : duesList) {
+//			yearSet.add(dues.getTime().substring(0,4) + "년");
+//		}	
+//		
+//		//2)최근순대로 정렬
+//		List<String> yearList = new ArrayList<String>(yearSet);		//먼저 set => list로 변환
+//		Collections.sort(yearList, Collections.reverseOrder());
 
 		//현재 날짜(년 월)
 		String date = new SimpleDateFormat("yyyy.MM").format(new Date());
 		
-		//알림 설정 상태 보여주기
-		gatheringVO.setId(loginVO.getId());		//알림은 각자 설정하는 거기 때문에 모임통장 소유주만 있는 gathering테이블의 id칼럼과는 성격이 다르지만, vo객체를 따로 만드는 게 번거로워서 그냥 담아 보냈다.
-		participantVO = participantService.selectAllNotifySettings(gatheringVO);
+//		//알림 설정 상태 보여주기
+//		gatheringVO.setId(loginVO.getId());		//알림은 각자 설정하는 거기 때문에 모임통장 소유주만 있는 gathering테이블의 id칼럼과는 성격이 다르지만, vo객체를 따로 만드는 게 번거로워서 그냥 담아 보냈다.
+//		participantVO = participantService.selectAllNotifySettings(gatheringVO);
 		
 		//모임통장 상태(사용/종료 예정) 가져오기
 //		for(ParticipantVO participantVO:participantList) {
 //			//모임통장의 소유주일 때만 가져오기
 //			if(participantVO.getId().equals(loginVO.getId()) && participantVO.getType().equals("301")) {
-				scheduledEndVO = scheduledEndService.selectIfExist(gathering);			
+//				scheduledEndVO = scheduledEndService.selectIfExist(gathering);			
 //			}
 //		}
 	
@@ -271,12 +270,12 @@ public class GatheringController {
 		mav.addObject("gathering", gathering);
 		mav.addObject("participantList", participantList);
 		mav.addObject("transactionList", transactionList);
-		mav.addObject("duesList", duesList);
-		mav.addObject("monthList", monthList);
-		mav.addObject("yearList", yearList);
+//		mav.addObject("duesList", duesList);
+//		mav.addObject("monthList", monthList);
+//		mav.addObject("yearList", yearList);
 		mav.addObject("date", date);
-		mav.addObject("participantVO", participantVO);
-		mav.addObject("scheduledEndVO", scheduledEndVO);
+//		mav.addObject("participantVO", participantVO);
+//		mav.addObject("scheduledEndVO", scheduledEndVO);
 		
 		return mav;
 	}	
@@ -329,7 +328,7 @@ public class GatheringController {
 		
 		//알림 설정 상태 보여주기
 		participantVO = participantService.selectAllNotifySettings(gatheringVO);
-		
+
 		//모임통장 상태(사용/종료 예정) 가져오기
 		scheduledEndVO = scheduledEndService.selectIfExist(gatheringVO);			
 		

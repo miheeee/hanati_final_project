@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import kr.ac.kopo.account.dao.AccountDAO;
 import kr.ac.kopo.account.vo.AccountVO;
@@ -45,10 +46,44 @@ public class TransactionServiceImpl implements TransactionService{
 	@Autowired
 	private NotifyService notifyService;
 	
+	@Autowired
+	private GatheringVO gatheringVO;
+	
 	//이체
+	@Transactional
 	@Override
 	public void transfer(TransactionVO fromTransaction) {
 
+		//출금 전 하나은행으로의 이체에 대해선 이체를 받는 계좌번호가 실제 테이블에 존재하지 않으면 어떠한 작업도 수행하지 않고 리턴해주기
+		if(fromTransaction.getCounterpartBank().equals("081")) {
+			//입력받은 계좌번호가 안심계좌번호 형태일 때
+			if(fromTransaction.getCounterpartAccountNo().startsWith("7979")) {
+				gatheringVO.setSafeAccountNo(fromTransaction.getCounterpartAccountNo());
+				//그에 맞는 실제 계좌번호를 가진 입출금 계좌가 존재하는지 확인
+				GatheringVO gathering = gatheringDAO.selectBySafeAccountNo(gatheringVO);
+				//존재한다면
+				if(gathering != null) {
+					//실제 계좌번호로 이체 정보 다시 세팅
+					fromTransaction.setCounterpartAccountNo(gathering.getAccountNo());
+				//존재하지 않는다면
+				}else {
+					//바로 리턴
+					return;
+				}
+			//입력받은 계좌번호가 안심계좌번호 형태가 아닐 때
+			}else {
+				//실제 계좌번호라고 가정하고 입출금 계좌가 존재하는지 확인
+				AccountVO acc = new AccountVO();
+				acc.setAccountNo(fromTransaction.getCounterpartAccountNo());
+				acc = accountDAO.selectByAccountNo(acc);
+				//존재하지 않는다면
+				if(acc == null) {
+					//바로 리턴
+					return;
+				}
+			}
+		}	
+		
 		//출금은 공통
 		accountDAO.withdraw(fromTransaction);
 		gatheringDAO.withdraw(fromTransaction);
@@ -70,14 +105,24 @@ public class TransactionServiceImpl implements TransactionService{
 			//출금 거래 내역 삽입
 			fromTransaction.setCounterpart("타행 이체");
 			int transactionNo = transactionDAO.selectTransactionNo();		//다음 거래번호 알아오기
+			System.out.println(transactionNo);
 			fromTransaction.setTransactionNo(transactionNo);
 			transactionDAO.insertDetails(fromTransaction);
 			//출금 알림
-//			notifyService.transferNoti(transactionNo);
+			notifyService.transferNoti(transactionNo);
 		}
 
 		// ii) 하나은행으로 이체면 출금에 더해 입금까지 모두 수행
 		if(fromTransaction.getCounterpartBank().equals("081")) {
+			
+			//입금 수행 전 이체를 받는 상대방의 계좌번호가 안심계좌번호라면 실제 계좌번호 알아오기			
+			if(fromTransaction.getCounterpartAccountNo().startsWith("7979")) {
+				gatheringVO.setSafeAccountNo(fromTransaction.getCounterpartAccountNo());
+				GatheringVO gathering = gatheringDAO.selectBySafeAccountNo(gatheringVO);
+				if(gathering != null) {
+					fromTransaction.setCounterpartAccountNo(gathering.getAccountNo());
+				}
+			}
 			
 			//입금 수행
 			toTransaction.setAccountNo(fromTransaction.getCounterpartAccountNo());
@@ -87,8 +132,8 @@ public class TransactionServiceImpl implements TransactionService{
 			
 			//입금 거래내역 삽입을 위해 입금 계좌 정보 알아오기(소유주이름, 잔액)
 			toAccount.setAccountNo(toTransaction.getAccountNo());
-			toAccount = accountDAO.selectByAccountNo(toAccount);
-			
+			toAccount = accountDAO.selectByAccountNo(toAccount);				
+		
 			//출금 거래 내역 삽입
 			fromTransaction.setCounterpart(toAccount.getHolder());		//?없는 계좌번호면 어떻게 할까
 			int transactionNo = transactionDAO.selectTransactionNo();
@@ -96,7 +141,7 @@ public class TransactionServiceImpl implements TransactionService{
 			
 			transactionDAO.insertDetails(fromTransaction);
 			//출금 알림
-//			notifyService.transferNoti(transactionNo);
+			notifyService.transferNoti(transactionNo);
 		
 			//입금 거래 내역 삽입
 			toTransaction.setBalance(toAccount.getBalance());
@@ -133,7 +178,7 @@ public class TransactionServiceImpl implements TransactionService{
 			
 			transactionDAO.insertDetails(toTransaction);
 			//입금 알림
-			notifyService.transferNoti(transactionNo2);
+			//notifyService.transferNoti(transactionNo2);
 		}
 	}
 	

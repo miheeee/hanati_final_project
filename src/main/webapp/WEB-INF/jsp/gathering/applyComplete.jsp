@@ -23,7 +23,7 @@
         <div class="container">
           <div class="row slider-text align-items-center justify-content-center text-center">
             <div class="col-md-7 col-sm-12 element-animate">
-              <h1 class="text-white">모임통장 신청</h1>
+              <h1 class="text-white">모임통장 전환</h1>
             </div>
           </div>
         </div>
@@ -36,7 +36,7 @@
         <div class="row mb-5 justify-content-center">
           <div class="col-md-7 order-lg-1">
 			
-			<h2 class="text-uppercase heading mb-4">모임통장 신청 완료</h2>
+			<h2 class="text-uppercase heading mb-4">모임통장 전환 완료</h2>
             <p class="mb-3">이제 모임통장에 친구를 초대해보세요</p>
 			<table class="table">
 				<tr>
@@ -69,16 +69,7 @@
 		</div>				
       </div>
     </section>
-    
-    <section class="container cta-overlap">
-      <div class="text d-flex">
-        <h2 class="h3">Contact Us For Projects or Need a Quotations</h2>
-        <div class="ml-auto btn-wrap">
-          <a href="get-quote.html" class="btn-cta btn btn-outline-white">Get A Quote</a>
-        </div>
-      </div>
-    </section>
-    <!-- END section -->
+
 
 	<!-- footer BEGIN -->
 		<jsp:include page="/WEB-INF/jsp/include/footer.jsp" /> 

@@ -1,68 +1,180 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset='utf-8' />
+<link href='${ pageContext.request.contextPath }/resources/fullCalendar/packages/core/main.css' rel='stylesheet' />
+<link href='${ pageContext.request.contextPath }/resources/fullCalendar/packages/daygrid/main.css' rel='stylesheet' />
+<link href='${ pageContext.request.contextPath }/resources/fullCalendar/packages/timegrid/main.css' rel='stylesheet' />
+<script src='${ pageContext.request.contextPath }/resources/fullCalendar/packages/core/main.js'></script>
+<script src='${ pageContext.request.contextPath }/resources/fullCalendar/packages/interaction/main.js'></script>
+<script src='${ pageContext.request.contextPath }/resources/fullCalendar/packages/daygrid/main.js'></script>
+<script src='${ pageContext.request.contextPath }/resources/fullCalendar/packages/timegrid/main.js'></script>
+<script src="https://code.jquery.com/jquery-3.4.1.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+<script>
 
-	<!-- <script src="../static/vendor/jquery/jquery.min.js"></script>
-	<script src="../static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script> -->
+  document.addEventListener('DOMContentLoaded', function() {
+    var calendarEl = document.getElementById('calendar');
+
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+      plugins: [ 'interaction', 'dayGrid', 'timeGrid' ],
+      header: {
+        left: 'prev,next today',
+        center: 'title',
+        right: 'dayGridMonth,timeGridWeek,timeGridDay'
+      },
+      defaultDate: '2020-10-12',
+      navLinks: true, // can click day/week names to navigate views
+      selectable: true,
+      selectMirror: true,
+      select: function(arg) {
+    	  //alert(info.dateStr);
+    	  
+    	  let today = new Date();
+    	  let year = today.getFullYear(); // 년도
+    	  let month = today.getMonth() + 1;  // 월
+    	  let date = today.getDate();  // 날짜
+    	  let day = today.getDay();  // 요일
+    	  let hours = today.getHours(); // 시
+    	  let s = year + '년 ' + month + '월 ' + date + '일'	
+    	  			+ ((hours+1 >= 12)? '오후 ': '오전 ') + ((hours+1 >= 12)? hours+1-12: hours+1) + ':00';
+    	  let e = year + '년 ' + month + '월 ' + date + '일'	
+			+ ((hours+2 >= 12)? '오후 ': '오전 ') + ((hours+2 >= 12)? hours+2-12: hours+2) + ':00';
+
+ 		$("#edit-start").val(s);
+		$("#edit-end").val(e); 
+
+    	$("#eventModal").modal('show');
+        $("#save-event").click(function(){
+            var title = $("#edit-title").val();
+        	if(title){
+                calendar.addEvent({
+                    title: title,
+                    start: arg.start,
+                    end: arg.end,
+                    allDay: arg.allDay
+                })        		
+        	}
+        	$("#eventModal").modal('hide');            
+        })
+        calendar.unselect()
+      },
+      editable: true,
+      eventLimit: true, // allow "more" link when too many events
+      events: [
+/*         {
+          title: '회비 입금일',
+          start: '2020-10-05',
+       	  color: '#D25565;',   // an option!
+       	  textColor: 'white' // an option!
+        }, */
+        {
+          title: '길동 생일',
+          start: '2020-10-16',
+       	  color: '#9775fa;',   // an option!
+       	  textColor: 'white' // an option!
+        },
+        {
+          title: '모임',
+          start: '2020-10-13T18:00:00',
+			color: '#63e6be;',   // an option!
+			textColor: 'white' // an option!
+        },
+        {
+            title: '번개',
+            start: '2020-10-04T19:00:00',
+  			color: '#ffa94d;',   // an option!
+  			textColor: 'white' // an option!
+          },
+         {
+             title: '철수 생일',
+             start: '2020-10-09T19:00:00',
+   			color: '#f06595;',   // an option!
+   			textColor: 'white' // an option!
+           }
+      ]
+    });
+    calendar.render();
+  });
+
+</script>
+<style>
+
+  body {
+    margin: 40px 10px;
+    padding: 0;
+    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-size: 14px;
+  }
+
+  #calendar {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+	label {
+		width: 50px;
+		margin-left: 10px;
+		/* vertical-align: text-top; */
+	}
 	
-	<!-- CSS -->    
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.min.css">
-	<!-- JavaScript -->
-	<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/main.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/locales-all.min.js"></script>
-	<!-- Other -->
-	<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.3.2/package.json"></script>
-	<!-- Bootstrap -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-	<!-- 아이콘 -->
-	<script src="https://kit.fontawesome.com/925e80bab6.js"></script>
+</style>
+</head>
+<body>
 
+  <div id='calendar'></div>
+  
+  <!-- 일정 추가 MODAL -->
+  <div class="modal fade" tabindex="-1" role="dialog" id="eventModal">
+      <div class="modal-dialog" role="document">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h4 class="modal-title">새로운 일정</h4>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                          aria-hidden="true">&times;</span></button>
+              </div>
+              <div class="modal-body">
 
-	<!-- 캘린더가 표현될 공간 -->
-	<div id='calendar'></div>
+                  <div class="row">
+                      <div class="col-xs-12">
+                          <label class="col-xs-4" for="edit-title">일정명</label>
+                          <input class="inputModal" type="text" name="edit-title" id="edit-title"
+                              required="required" />
+                      </div>
+                  </div>
+                  
+                  <div class="row">
+                      <div class="col-xs-12">
+                          <label class="col-xs-4" for="edit-start">시작</label>
+                          <input class="inputModal" type="text" name="edit-start" id="edit-start" />
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-xs-12">
+                          <label class="col-xs-4" for="edit-end">끝</label>
+                          <input class="inputModal" type="text" name="edit-end" id="edit-end" />
+                      </div>
+                  </div>
+                  <div class="row">
+                      <div class="col-xs-12">
+                          <label class="col-xs-4" for="edit-desc" id="memoLable">메모</label>
+                          <textarea rows="4" cols="50" class="inputModal" name="edit-desc"
+                              id="edit-desc"></textarea>
+                      </div>
+                  </div>
+              </div>
+              <div class="modal-footer modalBtnContainer-addEvent">
+                  <button type="button" class="btn btn-default" data-dismiss="modal">취소</button>
+                  <button type="button" class="btn btn-primary" id="save-event">저장</button>
+              </div>
+          </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->  
 
-	<!-- 특정 일을 눌렀을 때 띄워주는 모달 -->
-	<div class="modal" id="myModal" tabindex="-1" role="dialog">
-	  <div class="modal-dialog modal-dialog-centered" role="document">
-	    <div class="modal-content">
-	      
-	      <div class="modal-header">
-	        <h5 class="modal-title">Modal title</h5>
-	      </div>
-	      
-	      <div class="modal-body">
-	        <p>Modal body text goes here.</p>
-	      </div>
-	      
-	      <div class="text-right mr-4 mb-2">
-			<span style="font-size: 2em; color:navy;">
-				<i class="fas fa-plus-circle"></i>
-			</span>
-	      </div>
-	      
-	    </div>
-	  </div>
-	</div>
-
-    <script>
-	<!-- initialize a calendar via browser globals -->
-      document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-          /* initialView: 'dayGridMonth' */
-          selectable: true,
-          dateClick: function(info) {
-        	    alert('Clicked on: ' + info.dateStr);
-        	    
-        	    $('#myModal').modal('show');
-        	  }          
-        });
-        calendar.render();
-      });
-
-    </script>
-
-    
+</body>
+</html>

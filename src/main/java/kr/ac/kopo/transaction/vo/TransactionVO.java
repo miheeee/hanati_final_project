@@ -17,7 +17,7 @@ public class TransactionVO {
 	private String counterpartBank;
 	private String paidMember;
 	private String memo;
-	
+	private String password;
 	public int getTransactionNo() {
 		return transactionNo;
 	}
@@ -90,12 +90,21 @@ public class TransactionVO {
 	public void setMemo(String memo) {
 		this.memo = memo;
 	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
 	@Override
 	public String toString() {
 		return "TransactionVO [transactionNo=" + transactionNo + ", time=" + time + ", classification=" + classification
 				+ ", amount=" + amount + ", balance=" + balance + ", accountNo=" + accountNo + ", indication="
 				+ indication + ", counterpart=" + counterpart + ", counterpartAccountNo=" + counterpartAccountNo
-				+ ", counterpartBank=" + counterpartBank + ", paidMember=" + paidMember + ", memo=" + memo + "]";
+				+ ", counterpartBank=" + counterpartBank + ", paidMember=" + paidMember + ", memo=" + memo
+				+ ", password=" + password + "]";
 	}
+	
+
 
 }

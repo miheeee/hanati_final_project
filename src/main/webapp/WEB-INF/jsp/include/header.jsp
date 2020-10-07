@@ -18,7 +18,7 @@
    <nav class="navbar navbar-expand-lg navbar-light bg-light">
      <div class="container">
 
-		<a class="navbar-brand position-absolute" href="${ pageContext.request.contextPath }"><img src="${ pageContext.request.contextPath }/resources/img/logo6.JPG""></a>
+		<a class="navbar-brand position-absolute" href="${ pageContext.request.contextPath }/"><img src="${ pageContext.request.contextPath }/resources/img/logo6.JPG""></a>
 		
        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample05" aria-controls="navbarsExample05" aria-expanded="false" aria-label="Toggle navigation">
          <span class="navbar-toggler-icon"></span>
@@ -29,21 +29,21 @@
 			<c:choose>
 				<c:when test="${empty loginVO}">
 		             <li class="nav-item">
-		               <a class="nav-link active" href="${ pageContext.request.contextPath }">Home</a>
+		               <a class="nav-link active" href="${ pageContext.request.contextPath }/">Home</a>
 		             </li>   				
 				</c:when>
 				<c:otherwise>
 					<li class="nav-item">
-		               <a class="nav-link" href="${ pageContext.request.contextPath }">Home</a>
+		               <a class="nav-link" href="${ pageContext.request.contextPath }/">Home</a>
 		             </li>  
 				</c:otherwise>
 			</c:choose>              
 
 			<li class="nav-item">
-             <a class="nav-link" href="${ pageContext.request.contextPath }/gathering/apply">모임통장 전환</a>
+             <a class="nav-link" href="${ pageContext.request.contextPath }/gathering/apply">모임통장전환</a>
            </li>
            	<li class="nav-item">
-             <a class="nav-link" href="${ pageContext.request.contextPath }/#">계좌 조회</a>
+             <a class="nav-link" href="${ pageContext.request.contextPath }/">계좌조회</a>
            </li>
            <li class="nav-item">
              <a class="nav-link" href="${ pageContext.request.contextPath }/transaction/transfer">이체</a>

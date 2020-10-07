@@ -800,7 +800,8 @@ header {
     line-height: 1;
     vertical-align: bottom;
 }
-.hHead th:first-child, .hBody td:first-child{
+.hHead th:first-child, .hBody td:first-child,
+.transferForm th:first-child, .transferForm td:first-child{
     border-left: none;
 }
 
@@ -825,6 +826,10 @@ header {
 
 .table td:last-child{
 	border-bottom: 1px solid #dee2e6;
+}
+
+.table tr:last-child{
+	border-bottom: 1px solid #dee2e6;	
 }
 
 /* .table{
@@ -979,7 +984,7 @@ h5{
     font-family: 'NotoSans_Regular';
 	outline: none;
 	-webkit-writing-mode: none;
-	-webkit-appearance: none;
+/* 	-webkit-appearance: none; */
 	-moz-appearance: none;
 	cursor: pointer;
     outline: none;
@@ -1018,6 +1023,111 @@ h5{
     border: 1px solid #a9e1db;
 }
 
+
+/*          이체 폼              */
+.transferForm{
+    font-family: NotoSans_Regular;
+    font-weight: normal;
+   	text-align: center;
+   	background-color: transparent;
+	width: 100%;
+  	margin-bottom: 50px;
+    border-top : 2px solid #777;
+    border-bottom: 1px solid #999;  
+}
+
+.transferForm th{
+    font-family: NotoSans_Regular;
+	font-size: 16px;
+	text-align: center;
+    color: #222a3b;
+    background-color: #f6f6f6;
+    border: 0;
+    border-top:1px solid #dee2e6;
+    border-left: 1px solid #ddd;
+    height: auto;   
+    line-height: 1;
+    vertical-align: bottom;
+    font-weight: normal;	
+	vertical-align: middle;
+    text-align: left;
+    padding-left: 25px;
+    width: 180px;
+}
+
+.transferForm td{
+    font-family: NotoSans_Regular;
+    font-weight: normal;	
+    font-style: normal;
+    font-size: 17px;
+	border: 0;
+	border-left: 1px solid #ddd;
+    border-top:1px solid #dee2e6;
+	padding: 15px 20px;
+    text-align: center;
+	color: #222a3b;
+    vertical-align: top;
+}
+
+.transferFormSubmit{
+	line-height: 44px;
+    padding: 0px 29px;
+    border: 1px solid #27b2a5;
+    border-radius: 3px;
+    min-width: 112px;
+    display: inline-block;
+    text-align: center;
+    margin : 0px auto;
+} 
+
+.aste {
+    font-size: 18px;
+    width: 10px;
+    color: #ff034a;
+}
+
+.aste span {
+    font-size: 0;
+    text-indent: -9999px;
+}
+
+/*         모임통장 전환             */
+.transferForm p{
+    font-family: NotoSans_Regular;
+    font-weight: lighter;	
+    font-style: normal;
+    font-size: 14px;
+   	color: #222a3b;
+	margin-bottom: 1px;
+	text-align: left;
+}
+
+.transferForm img{
+	width: 25px;
+	height: 25px;
+}
+
+.transferForm input[type="checkbox"]{
+	width: 10px;
+	margin-left: 0;
+	text-align: left;
+}
+
+.transferForm label{
+	display:inline-block; width:465px;
+	text-align: left;
+}
+
+/*		모임통장 상세페이지에서 모임원 목록을 펼텼을 때*/
+.card-body{
+	width: 350px;
+	margin: auto;
+}
+
+/*				멤버끊기 버튼 정렬		*/
+.expel{
+	margin-top: 9px;
+}
 
 /* #periodList option{
   outline: none;

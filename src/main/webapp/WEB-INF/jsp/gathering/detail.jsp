@@ -13,6 +13,7 @@
 	<!-- head BEGIN -->
 		<jsp:include page="/WEB-INF/jsp/include/head.jsp" /> 
 	<!-- head END -->
+
 </head>
 <body>
 	<!-- header BEGIN -->
@@ -49,18 +50,20 @@
 
 				<div class="collapse" id="collapseExample">
 				  <div class="card card-body">
-				  		참여중 멤버(${fn:length(participantList)})
+				  		<div>
+					  		<span style="text-align:center;margin-left:90px;">참여중 멤버(${fn:length(participantList)})</span>
+			   				<c:if test="${gathering.id == loginVO.id }">
+			   					<a id="kakao-link-btn" href="javascript:sendLink()" style="margin-left:60px;color:#27b2a5;">초대</a>
+					   		</c:if>		
+					   	</div>		  		
 				   	<table class="table">
 				   		<c:forEach items="${participantList}" var="participant">
 				   			<c:choose>
 					   			<c:when test="${participant.type == '301'}">
 					   				<c:set var="holder" value="${participant.name}"/>
-					   				<c:if test="${gathering.id == loginVO.id }">
-					   					<a id="kakao-link-btn" href="javascript:sendLink()">초대</a>
-							   		</c:if>
 							   		<tr>
 							   			<td>
-										   	<span style="font-size: 2em; color: Tomato;">
+										   	<span style="font-size: 2em; color: Tomato; margin-left:17px;">
 											    <i class="fas fa-user-circle" style="color:gray;"></i>
 											</span>${participant.name}★
 							   			</td>
@@ -90,18 +93,35 @@
 				  </div>
 				</div>		
 				
-			</div>	
-				
+			</div>
+			<c:choose>	
+			<c:when test="${gathering.id == loginVO.id }">
+				<button type="button" class="btn btn-primary mt-4" onclick="location.href='/transaction/transfer/${gathering.safeAccountNo}'">이체하기</button>
+			</c:when>
+			<c:otherwise>
+								<button type="button" class="btn btn-primary mt-4" onclick="location.href='/transaction/transfer/dues/${gathering.safeAccountNo}'">회비입금</button>
+			</c:otherwise>
+			</c:choose>
         </div>
       </div>
       </div>
       
       <div id="DetailtabWrap">
     	 <ul class="Detailtabul">
-    	 	<li class="Detailtabli li0on" id="li0"><a href="#" onclick="javascript:transaction();return false;">거래내역</a></li>
+     		<li class="Detailtabli li0on" id="li0"><a href="#" onclick="javascript:transaction();return false;">거래내역</a></li>
     	 	<li class="Detailtabli" id="li1"><a href="#" onclick="javascript:dues();return false;">회비내역</a></li>
     	 	<li class="Detailtabli" id="li2"><a href="#" onclick="javascript:settings();return false;">모임설정</a></li>
-    	 	<li class="Detailtabli" id="li3"><a href="#" onclick="javascript:calendar();return false;">일정관리</a></li>
+    	 	<li class="Detailtabli" id="li3"><a href="#####" id="calendarTab">일정관리</a></li>
+    	 	<!-- <li class="Detailtabli" id="li3"><a href="#" id="calendarTab">일정관리</a></li>  -->
+    	 	   	 	
+<!--     	<li class="Detailtabli li0on" id="li0" onclick="javascript:transaction();return false;">거래내역</li>
+    	 	<li class="Detailtabli" id="li1" onclick="javascript:dues();return false;">회비내역</li>
+    	 	<li class="Detailtabli" id="li2" onclick="javascript:settings();return false;">모임설정</li>
+    	 	<li class="Detailtabli calendarTab" id="li3">일정관리</li>
+    	 	<li class="Detailtabli calendarTab" id="li3">일정관리</li> -->
+    	 	<%-- <li class="Detailtabli" id="li3"><a href="#" onclick="javascript:calendar(event);return false;">일정관리</a></li>--%>
+    	 	
+    	 	
     	 </ul> 
       </div>
     
@@ -167,14 +187,17 @@
 					</table>			  		
 			  	</div>
 			  	
-				<form id="excelForm" name="excelForm" method="post" action="${ pageContext.request.contextPath }/excelDownload">
-					<input type="hidden" name="safeAccountNo" value="${gathering.safeAccountNo}">
-					<input type="hidden" name="accountNo" value="${gathering.accountNo}">
-					<input type="hidden" name="id" value="${gathering.id}">
-					<input type="submit" class="excelDownBtn" value="거래내역 다운로드" />
-					<img alt="excel" src="${ pageContext.request.contextPath }/resources/img/excel-png.png" style="width:2em;height:2em;float:right;">
-				</form> 
-
+			  	<c:if test="${gathering.id == loginVO.id }">
+					<form id="excelForm" name="excelForm" method="post" action="${ pageContext.request.contextPath }/excelDownload">
+						<input type="hidden" name="safeAccountNo" value="${gathering.safeAccountNo}">
+						<input type="hidden" name="accountNo" value="${gathering.accountNo}">
+						<input type="hidden" name="id" value="${gathering.id}">
+						<input type="hidden" name="name" value="${gathering.name}">
+						<input type="hidden" name="balance" value="${gathering.balance}">
+						<input type="submit" class="excelDownBtn" value="거래내역 다운로드" />
+						<img alt="excel" src="${ pageContext.request.contextPath }/resources/img/excel-png.png" style="width:2em;height:2em;float:right;">
+					</form> 
+				</c:if>
     
         </div>
        </div>
@@ -213,17 +236,21 @@
         		alert('문제가 생겼습니다. 다시 시도해주세요.');
         	}
         }) 
-	} 
+	}  
 	
-	<!-- 회비내역 --> 
+	<!-- 회비내역 -->  
 	function dues(){
         $.ajax({
         	url : '${ pageContext.request.contextPath }/dues/list',
         	type : 'post', 
         	data : {
 				accountNo : ${gathering.accountNo}, 
-				safeAccountNo : ${gathering.safeAccountNo}
-        	},   
+				safeAccountNo : ${gathering.safeAccountNo},
+				name : '${gathering.name}',
+				holder : '${holder}',
+				balance : '${gathering.balance}',
+				id : '${gathering.id}',
+        	},    
         	success : function(data){   
 				$('#content').empty();
 				$('#content').html(data); 
@@ -231,17 +258,17 @@
         		alert('문제가 생겼습니다. 다시 시도해주세요.');
         	}
         }) 
-	} 
+	}  
 	
 	<!-- 관리 --> 
-	function settings(){
+	function settings(){ 
         $.ajax({
         	url : '${ pageContext.request.contextPath }/gathering/settings',
         	type : 'post', 
         	data : {
 				accountNo : ${gathering.accountNo}, 
 				safeAccountNo : ${gathering.safeAccountNo}
-        	},   
+        	},    
         	success : function(data){    
 				$('#content').empty();
 				$('#content').html(data); 
@@ -250,8 +277,48 @@
         	}
         })  
 	} 
-	
-	<!-- 일정관리 --> 
+	 
+	<!-- 일정관리 -->     
+   	$(document).ready(function(){
+		$("#calendarTab").on("click",function(e){ 
+	        e.preventDefault();    // 추가이벤트를 막아서 #의 최상위이동막음!!!
+	       location.href = "${ pageContext.request.contextPath }/calendar"
+	        //e.stopPropagation();
+/* 	        $.ajax({
+	        	url : '${ pageContext.request.contextPath }/calendar',
+	        	method : 'get',  
+	        	success : function(data){    
+	        		alert(data.length); 
+	        		console.log(data);
+					$('#content').empty();
+					$('#content').html(data);
+	        	}, error : function(){
+	        		alert('문제가 생겼습니다. 다시 시도해주세요.');
+	        	}
+	        })   */
+		})
+   	})
+   	
+   	
+/*    	$(document).ready(function(){
+		$("#calendarTab").on("click",function(e){
+ 	        e.preventDefault();    // 추가이벤트를 막아서 #의 최상위이동막음!!!
+		 	    e.stopPropagation();
+		   		 e.stopImmediatePropagation(); 
+	        $.ajax({ 
+	        	url : '${ pageContext.request.contextPath }/calendar',
+	        	method : 'get',  
+	        	success : function(data){    
+					$('#content').empty();
+					$('#content').html(data);   
+	        	}, error : function(){
+	        		alert('문제가 생겼습니다. 다시 시도해주세요.');
+	        	}
+	        })  
+		})
+   	})    
+   		
+		<!-- 일정관리 --> 
 	function calendar(){
         $.ajax({
         	url : '${ pageContext.request.contextPath }/calendar',
@@ -263,8 +330,23 @@
         		alert('문제가 생겼습니다. 다시 시도해주세요.');
         	}
         })  
-	}
-	
+	} 
+   	
+   		function calendar(event){ 
+   		event.preventDefault();
+   		event.stopPropagation();
+   		event.stopImmediatePropagation();
+        $.ajax({
+        	url : '${ pageContext.request.contextPath }/calendar',
+        	method : 'get',  
+        	success : function(data){    
+				$('#content').empty();
+				$('#content').html(data);   
+        	}, error : function(){
+        		alert('문제가 생겼습니다. 다시 시도해주세요.');
+        	}
+        })  
+   	} */
 	
 	<!-- 탭 클릭 시 css바꾸기 -->
    	$(document).ready(function(){
@@ -284,7 +366,7 @@
    	<!-- 웹 페이지에 JavaScript SDK 포함하기 -->
 	<script src="https://developers.kakao.com/sdk/js/kakao.js"></script>	
 	<script>
-	<!-- javaScript 키를 할당하여 초기화 함수를 호출 -->
+	//javaScript 키를 할당하여 초기화 함수를 호출
 	Kakao.init('b97f5e6fd4e89053e09e2b07e0f24dad');		//자신의 appkey 삽입
 	console.log(Kakao.isInitialized());
 	</script>
@@ -311,73 +393,6 @@
 	  	}
 	  </script>
 	
-	
-	<!-- 카카오톡 메세지 -->
-	<script>
-	$(document).ready(function(){
-		$("input:radio[name=chk_message]").click(function(){
-			if($("input[name=chk_message]:checked").val() == "requestDues"){
-				let $img = $('<img src="${ pageContext.request.contextPath }/resources/img/10_MANANDGIRL.png" width="100%" height="30%">');
-				let $input = $('<input type="text" id="requestDuesAmount">')
-				$('#messageContent').empty();
-				$('#messageContent').append($img);
-				$('#messageContent').append("요청할 금액 : ");
-				$('#messageContent').append($input);
-				$('#messageContent').append("원");
-			}else if($("input[name=chk_message]:checked").val() == "shareStatus"){
-				let $img = $('<img src="${ pageContext.request.contextPath }/resources/img/6_BIRD.png" width="100%" height="30%">');
-				$('#messageContent').empty();
-				$('#messageContent').append($img);
-			}	
-		})
-	})
-
-	  function sendMessage() {
-		//회비 요청
-		if($("input[name=chk_message]:checked").val() == "requestDues"){	
-			
-		    Kakao.Link.sendCustom({
-		        templateId: 36914,
-		        templateArgs: {
-		        	amount:
-		        	  $('#requestDuesAmount').val(),
-		        	safeAccountNo:
-		        	  '${gathering.safeAccountNo}',
-		        	  name:
-		        	   '${gathering.name}',	       		  
-		        	   holder:
-		        		'${holder}'
-		        },	callback: function(){
-		       		alert("메세지카드가 전송되었습니다");
-		       	}
-		      })    
-		//현황 공유	
-		}else if($("input[name=chk_message]:checked").val() == "shareStatus"){
-			
-		    Kakao.Link.sendCustom({
-		        templateId: 36915,
-		        templateArgs: {
-		        	dues:
-							'${totalMonthAmount}',
-		        	  balance:
-		        	  	'${gathering.balance}',
-		        	  count:
-							'${totalCnt}',
-		       			name:
-		       				'${gathering.name}',
-		       			safeAccountNo:
-		       				'${gathering.safeAccountNo}'
-		        },	callback: function(){
-		       		alert("메세지카드가 전송되었습니다");
-		       		location.href='${ pageContext.request.contextPath }/participant/authentication/' + code;
-		       	}
-		      })
-			
-		}
-	}
-	</script>
-	
-
 		    
 <script>	
 		<!-- 멤버 내보내기 -->

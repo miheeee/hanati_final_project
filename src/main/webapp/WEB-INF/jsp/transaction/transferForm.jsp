@@ -2,7 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,7 +19,7 @@
         <div class="container">
           <div class="row slider-text align-items-center justify-content-center text-center">
             <div class="col-md-7 col-sm-12 element-animate">
-              <h1 class="text-white">이체</h1>
+              <h1 class="text-white">계좌이체</h1>
             </div>
           </div>
         </div>
@@ -30,241 +30,125 @@
     <section class="section">
       <div class="container">
         <div class="row justify-content-center">
-          <div class="col-md-6">
+          <div class="col-md-8">
             <form action="${ pageContext.request.contextPath }/transaction/transfer" method="post">
-              
-				<div class="row">
-					<div class="col-md-12 form-group">
-						
-						<!-- 어떤 url로 요청이 들어왔는지에 따라 보여주는 형태 달라짐 -->
-						<c:set var="path" value="${requestScope['javax.servlet.forward.servlet_path']}"/> 
 
-						<label for="counterpartBank">받는 분 정보</label>	
-						<select name="counterpartBank" id="counterpartBank" class="form-control form-control-lg">
-							<c:forEach items="${ bankList }" var="bank" varStatus="loop">
-								<c:choose>
-									<c:when test="${bank.code == '081'}">
-										<option value="${ bank.code }" selected="selected">${ bank.codeName }</option>
+				  <h3 id="transaction" class="table-title">출금정보</h3>
+				  	<div>	
+						<%-- 어떤 url로 요청이 들어왔는지에 따라 보여주는 형태 달라짐 --%>
+						<c:set var="path" value="${requestScope['javax.servlet.forward.servlet_path']}"/> 				  			
+				  		<table class="transferForm">			  		
+				  			<tr>
+				  				<th>
+				  					하나은행 출금계좌<em class="aste">*<span>필수</span></em>
+				  				</th>
+				  				<td>
+				  				
+									<select name="accountNo" id="accountNo"  class="form-control form-control-lg">
+										<!-- 일반 입출금 통장 목록 -->
+										<c:forEach items="${ accountList }" var="account" varStatus="loop">
+										  <option value="${account.accountNo}">
+										 	${fn:substring(account.accountNo, 0, 3)}-${fn:substring(account.accountNo, 3, 9)}-${fn:substring(account.accountNo, 9, 14)} : 				  				
+							  				${ account.productName }&nbsp;
+										  	잔액 <fmt:formatNumber value="${account.balance}" pattern="#,###.##" />원
+										  </option>
+										</c:forEach>  
+										<!-- 모임주로 있는 모임통장 목록  -->
+										<c:forEach items="${ gatheringList }" var="gathering" varStatus="loop">
+											<c:choose>
+												<c:when test="${fn:substring(path, 0, fn:length(path) - 11) == '/transaction/transfer/' 
+													&&	gathering.safeAccountNo == safeAccountNo}">								
+													<option value="${ gathering.accountNo }" selected="selected">
+													  	${fn:substring(gathering.safeAccountNo, 0, 4)}-${fn:substring(gathering.safeAccountNo, 4, 6)}-${fn:substring(gathering.safeAccountNo, 6, 11)} : 
+													  	${ gathering.name }&nbsp;
+													  	잔액<fmt:formatNumber value="${gathering.balance}" pattern="#,###.##" />원
+												  	</option>
+												</c:when>
+												<c:otherwise>
+													<option value="${ gathering.accountNo }">
+													  	${fn:substring(gathering.safeAccountNo, 0, 4)}-${fn:substring(gathering.safeAccountNo, 4, 6)}-${fn:substring(gathering.safeAccountNo, 6, 11)} : 
+													  	${ gathering.name }&nbsp;
+													  	잔액 <fmt:formatNumber value="${gathering.balance}" pattern="#,###.##" />원
+												  	</option>
+												</c:otherwise>
+											</c:choose>
+										</c:forEach> 	
+									</select>				  					
+				  				</td>
+				  			</tr>
+				  			<tr>
+				  				<th>
+				  					계좌 비밀번호<em class="aste">*<span>필수</span></em>
+				  				</th>
+				  				<td><input type="password" name="password" placeholder="비밀번호 4자리를 입력하세요." style="width:345px;" class="form-control form-control-lg"></td>
+				  			</tr>				 
+				  			<tr>
+				  				<th>
+				  					이체금액<em class="aste">*<span>필수</span></em>
+				  				</th>
+				  				<td>
+				  					<input type="text" name="amount" id="amount" placeholder="0" class="form-control form-control-lg" style="width:448px;text-align:right">
+				  				</td>
+				  			</tr>
+				  		</table>
+				  	</div>
+				  				
+				  <h3 id="transaction" class="table-title">입금정보</h3>
+				  	<div>			
+				  		<table class="hTable transferForm">
+				  			<tr>
+				  				<th>
+				  					입금은행<em class="aste">*<span>필수</span></em>
+				  				</th>
+				  				<td>
+									<select name="counterpartBank" id="counterpartBank" class="form-control form-control-lg" style="width:345px;">
+										<c:forEach items="${ bankList }" var="bank" varStatus="loop">
+											<c:choose>
+												<c:when test="${bank.code == '081'}">
+													<option value="${ bank.code }" selected="selected">${ bank.codeName }</option>
+												</c:when>
+												<c:otherwise>
+													<option value="${ bank.code }">${ bank.codeName }</option>
+												</c:otherwise>
+											</c:choose>
+										</c:forEach>  
+									</select>					  				
+				  				</td>
+							</tr>
+							<tr>
+								<th>
+									입금 계좌번호<em class="aste">*<span>필수</span></em>
+								</th>
+								<td>
+									<c:choose>	
+									<%-- 회비를 입금하는 경우에는 --%>
+									<c:when test="${fn:substring(path, 0, fn:length(path) - 11) == '/transaction/transfer/dues/'}">
+										<input type="text" name="counterpartAccountNo" value="${safeAccountNo}" class="form-control form-control-lg">			
 									</c:when>
-									<c:otherwise>
-										<option value="${ bank.code }">${ bank.codeName }</option>
-									</c:otherwise>
-								</c:choose>
-							</c:forEach>  
-						</select>	
-						
-						<c:choose>	
-						<%-- 회비를 입금하는 경우에는 --%>
-						<c:when test="${fn:substring(path, 0, fn:length(path) - 11) == '/transaction/transfer/dues/'}">
-							<input type="text" name="counterpartAccountNo" value="${safeAccountNo}" class="form-control form-control-lg">			
-						</c:when>
-							<%-- 회비를 입금하는 경우를 제외하고 --%>
-							<c:otherwise>						
-								<input type="text" name="counterpartAccountNo" placeholder="[-]없이 입력" class="form-control form-control-lg">		
-							</c:otherwise>
-						</c:choose>
-						
-                	</div>
-		 		</div>
-		 
-				<div class="row">
-					<div class="col-md-12 form-group">
-						<label for="amountl">금액</label>
-						<input type="text" name="amount" id="amount" placeholder="0" class="form-control form-control-lg">
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="col-md-12 form-group banking-cont nothead">
-						<label for="accountNo">출금계좌</label>
-						<select name="accountNo" id="accountNo"  class="form-control form-control-lg">
-							<!-- 일반 입출금 통장 목록 -->
-							<c:forEach items="${ accountList }" var="account" varStatus="loop">
-							  <option value="${ account.accountNo }">
-							 	${ account.accountNo } : 				  				
-				  				${ account.productName } &nbsp;&nbsp;&nbsp;&nbsp;
-							  	잔액 ${ account.balance }원
-							  </option>
-							</c:forEach>  
-							<!-- 모임주로 있는 모임통장 목록  -->
-							<c:forEach items="${ gatheringList }" var="gathering" varStatus="loop">
-								<c:choose>
-									<c:when test="${fn:substring(path, 0, fn:length(path) - 11) == '/transaction/transfer/' 
-										&&	gathering.safeAccountNo == safeAccountNo}">								
-										<option value="${ gathering.accountNo }" selected="selected">
-										  	${ gathering.accountNo } : 
-										  	${ gathering.name } &nbsp;&nbsp;&nbsp;&nbsp;
-										  	잔액 ${ gathering.balance }원
-									  	</option>
-									</c:when>
-									<c:otherwise>
-										<option value="${ gathering.accountNo }">
-										  	${ gathering.accountNo } : 
-										  	${ gathering.name } &nbsp;&nbsp;&nbsp;&nbsp;
-										  	잔액 ${ gathering.balance }원
-									  	</option>
-									</c:otherwise>
-								</c:choose>
-							</c:forEach> 	
-						</select>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-12 form-group">
-                  <label for="indication">받는 통장 표시</label>
-                  <input type="text" name="indication" id="indication" class="form-control form-control-lg" cols="30" rows="8">
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col-md-12 form-group">
-                  <input type="submit" value="이체" class="btn btn-primary btn-lg btn-block">
-                </div>
-              </div>
-            </form>
-          
+										<%-- 회비를 입금하는 경우를 제외하고 --%>
+										<c:otherwise>						
+											<input type="text" name="counterpartAccountNo" placeholder="‘-’없이 계좌번호를 입력하세요." class="form-control form-control-lg">		
+										</c:otherwise>
+									</c:choose>								
+								</td>								
+							</tr>
+							<tr>
+								<th>받는분 통장 표시</th>
+								<td>
+									<input type="text" name="indication" id="indication" placeholder="최대 30자까지 입력 가능합니다." class="form-control form-control-lg" cols="30" rows="8">
+								</td>
+							</tr>							
+				  		</table>
+				  	</div>				  				
+				  				
+				  	<div class="d-flex jusify-content-center"><input type="submit" value="이체하기 " class="btn btn-primary transferFormSubmit" style="margin-left:auto;margin-right:2px">
+				  		<button type="button" class="btn btn-primary button transferFormSubmit" onclick = "location.href = '${ pageContext.request.contextPath }/' " style="margin-left:2px;margin-right:auto;background-color:#6e7277;border-color:#6e7277;">취소</button>
+				  	</div>			  		
+          	</form>
           </div>    
        </div>
       </div>
     </section>
-    
-<%--     <section class="section">
-      <div class="container">
-        <div class="row mb-5">
-          
-          <div class="col-md-12 order-lg-3 mb-5 form-group">
-            
-            
-				<form action="${ pageContext.request.contextPath }/transaction/transfer" method="post">
-					<div>
-						<p>받는 분</p>
-						<select name="counterpartBank" id="counterpartBank">
-							<c:forEach items="${ bankList }" var="bank" varStatus="loop">
-							  <option value="${ bank.code }">${ bank.codeName }</option>
-							</c:forEach>  
-						</select>
-						<input type="text" name="counterpartAccountNo" placeholder="[-]없이 입력">
-					</div>
-					<div class="col-12">
-					</div>
-					<div>
-						<p>금액</p>
-						<input type="text" name="amount" placeholder="0">원
-					</div>
-					<div class="col-12">
-					</div>
-					<div>
-						<p>출금계좌</p>
-						<select name="accountNo" id="accountNo">
-							<c:forEach items="${ gatheringList }" var="gathering" varStatus="loop">
-								<c:choose>									
-									<c:when test="${gathering.safeAccountNo == safeAccountNo}">
-										<option value="${ gathering.accountNo }" selected="selected">
-										  	${ gathering.accountNo } : 
-										  	${ gathering.name } &nbsp;&nbsp;&nbsp;&nbsp;
-										  	잔액 ${ gathering.balance }원
-									  	</option>
-									</c:when>
-									<c:otherwise>
-										<option value="${ gathering.accountNo }">
-										  	${ gathering.accountNo } : 
-										  	${ gathering.name } &nbsp;&nbsp;&nbsp;&nbsp;
-										  	잔액 ${ gathering.balance }원
-									  	</option>
-									</c:otherwise>
-								</c:choose>	 
-							</c:forEach> 
-							
-							<c:forEach items="${ accountList }" var="account" varStatus="loop">
-							  <option value="${ account.accountNo }">
-							 	${ account.accountNo } : 				  				
-				  				${ account.productName } &nbsp;&nbsp;&nbsp;&nbsp;
-							  	잔액 ${ account.balance }원
-							  </option>
-							</c:forEach>  
-							
-						</select>
-					</div>
-					<div class="col-12">
-					</div>
-					<div>
-						<p>받는 통장 표시</p>
-						<input type="text" name="indication">
-					</div>
-					<p>
-						 <input type="submit" value="이체하기">
-					</p>
-				</form>             
-            
-            
-          </div>
-          
-        </div> 
-        
-        
-        
-        
-        <div class="row">
-          <div class="col-md-6 order-lg-1 mb-5">
-            <img src="${ pageContext.request.contextPath }/resources/img/slider-2.jpg" alt="Image placeholder" class="img-fluid">
-          </div>
-          <div class="col-md-1 order-lg-2"></div>
-          <div class="col-md-5 order-lg-3">
-            <h2 class="text-uppercase heading mb-4">We Are 25 Years in Industry</h2>
-            <p class="mb-3">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi unde impedit, necessitatibus, soluta sit quam minima expedita atque corrupti reiciendis.</p>
-
-            <ul class="list-unstyled check">
-              <li>Soluta sit quam minima</li>
-              <li>Consectetur adipisicing elit</li>
-              <li>Commodi unde impedit</li>
-            </ul>
-          </div>
-          
-        </div>
-      </div>
-    </section>
-    
-    <section class="section border-t">
-      <div class="container">
-        <div class="row justify-content-center mb-5 element-animate">
-          <div class="col-md-8 text-center mb-5">
-            <h2 class="text-uppercase heading border-bottom mb-4">Testimonial</h2>
-            <p class="mb-0 lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi unde impedit, necessitatibus, soluta sit quam minima expedita atque corrupti reiciendis.</p>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-6 element-animate">
-            <div class="media d-block media-testimonial text-center">
-              <img src="${ pageContext.request.contextPath }/resources/img/person_1.jpg" alt="Image placeholder" class="img-fluid mb-3">
-              <p>Jane Doe, <a href="#">XYZ Inc.</a></p>
-              <div class="media-body">
-                <blockquote>
-                  <p>&ldquo;Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi unde impedit, necessitatibus, soluta sit quam minima expedita atque corrupti reiciendis.&rdquo;</p>  
-                </blockquote>
-
-              </div>
-            </div>
-          </div>
-
-          <div class="col-md-6 element-animate">
-            <div class="media d-block media-testimonial text-center">
-              <img src="${ pageContext.request.contextPath }/resources/img/person_3.jpg" alt="Image placeholder" class="img-fluid mb-3">
-              <p>John Doe, <a href="#">XYZ Inc.</a></p>
-              <div class="media-body">
-                <blockquote>
-                  <p>&ldquo;Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi unde impedit, necessitatibus, soluta sit quam minima expedita atque corrupti reiciendis.&rdquo;</p>  
-                </blockquote>
-
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
---%>
 
 
 	<!-- footer BEGIN -->

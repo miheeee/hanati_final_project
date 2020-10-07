@@ -94,6 +94,7 @@ public class SchedulerImpl implements Scheduler{
 		    		 msg += "이 종료되었습니다.";
 		    		 System.out.println(msg);
 		    		 //smsSender.send(map.get("tel"), msg);
+		    		 smsSender.send("01099194276", msg);
 		    	  }
 	      }catch(Exception e){
 	            e.printStackTrace();
@@ -102,7 +103,7 @@ public class SchedulerImpl implements Scheduler{
 	}
 	
 	//회비입금일이 오늘인 계좌의 알림 허용 모임원에게 문자 보내가
-	@Scheduled(cron="0 11 18 * * *")
+	@Scheduled(cron="0 32 0 * * *")
 	@Override
 	public void notifyScheduledDepositDate() {
 		try {
@@ -123,7 +124,7 @@ public class SchedulerImpl implements Scheduler{
 	  			  if(gathering.getAccountNo().equals(sddVO.getAccountNo())) {
 	  				  map.put("accountNo", gathering.getAccountNo());
 	  				  map.put("alias", gathering.getName());
-	  				  map.put("afeAccountNo", gathering.getSafeAccountNo());
+	  				  map.put("safeAccountNo", gathering.getSafeAccountNo());
 	  				  map.put("id", sddVO.getId());
 	  			  }
 				  }
@@ -136,7 +137,7 @@ public class SchedulerImpl implements Scheduler{
 			  }		  
 	  	  
 			  //문자 알림 보내기
-		  	  String msg;
+		  	  String msg = null;
 		  	  for(Map<String, String> map : totalList) {
 		  		 msg = "[HANA MOIM]오늘은 모임통장 ";
 		  		 msg += map.get("alias") + "(" + map.get("safeAccountNo") + ")";
@@ -144,6 +145,7 @@ public class SchedulerImpl implements Scheduler{
 		  		 System.out.println(msg);
 		  		 //smsSender.send(map.get("tel"), msg);
 		  	  }
+		  	smsSender.send("01099194276", msg);
 		}catch(Exception e){
             e.printStackTrace();
         }

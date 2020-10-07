@@ -12,14 +12,14 @@
 	<link rel="stylesheet" href="${ pageContext.request.contextPath }/resources/css/bootstrap.css">
 	<link rel="stylesheet" href="${ pageContext.request.contextPath }/resources/css/animate.css">
 	<link rel="stylesheet" href="${ pageContext.request.contextPath }/resources/css/owl.carousel.min.css">
-	<link rel="stylesheet" href="${ pageContext.request.contextPath }/resources/css/bootstrap-datepicker.css">
-	<link rel="stylesheet" href="${ pageContext.request.contextPath }/resources/css/jquery.timepicker.css">
+ 	<link rel="stylesheet" href="${ pageContext.request.contextPath }/resources/css/bootstrap-datepicker.css">
+	<link rel="stylesheet" href="${ pageContext.request.contextPath }/resources/css/jquery.timepicker.css"> 
 	
 	<link rel="stylesheet" href="${ pageContext.request.contextPath }/resources/fonts/ionicons/css/ionicons.min.css">
 	<link rel="stylesheet" href="${ pageContext.request.contextPath }/resources/fonts/fontawesome/css/font-awesome.min.css">
 	
 	<link rel="stylesheet" href="${ pageContext.request.contextPath }/resources/fonts/flaticon/font/flaticon.css">
 	
-	<!-- Theme Style -->
+	
 	<link rel="stylesheet" href="${ pageContext.request.contextPath }/resources/css/style.css">
 

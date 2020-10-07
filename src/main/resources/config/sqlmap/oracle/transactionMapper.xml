@@ -83,7 +83,11 @@
 		select to_char(time, 'yyyy.mm.dd') as time, amount,
 			paid_member as paidMember
 		from transaction
-		where account_no = #{accountNo} and paid_member = #{name}
+		where account_no = #{accountNo} and paid_member = #{name} 
+					and to_char(time,'yyyy/mm/dd hh:mi:ss') <![CDATA[ >= ]]> 
+						(select to_char(register_date,'yyyy/mm/dd hh:mi:ss') 
+							from participant
+								where account_no = #{accountNo} and id = #{id})	
 		order by time desc, paid_member asc 
 	</select>
 	

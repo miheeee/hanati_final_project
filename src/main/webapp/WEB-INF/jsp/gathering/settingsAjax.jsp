@@ -73,19 +73,33 @@
 	.slider.round:before {
 	  border-radius: 50%;
 	}
+	.btn-27b2a5 {
+	  color: #fff;
+	  background-color: #27b2a5;
+	  border-color: #27b2a5; 
+	}
+/* 	.modal-header{
+		background-color: #27b2a5;
+		border-bottom: 3px solid #27b2a5;
+	} */
 </style>
 
 <script src="${ pageContext.request.contextPath }/resources/js/jquery-3.2.1.min.js"></script>
-    
+
 <!-- 토글버튼 부트스트랩 -->
 <link href="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/css/bootstrap4-toggle.min.css" rel="stylesheet">
 <!-- iOS Style: Rounded -->	
 
 <!-- 알림 -->  			    
 <script src="https://cdn.jsdelivr.net/gh/gitbrent/bootstrap4-toggle@3.6.1/js/bootstrap4-toggle.min.js"></script>
+
+<!-- 부트스트랩 -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+    
 <script type="text/javascript">
 	<%-- 알림 토글 설정 --%>
-	$(document).ready(function(){		
+	$(document).ready(function(){
 		if(${participantVO.accountChange eq 'Y'}){
 	   		$('#accountChange').attr("checked", "checked");
 	   	}
@@ -95,8 +109,8 @@
 	   	if(${participantVO.depositDate eq 'Y'}){
 	   		$('#depositDate').attr("checked", "checked");
 	   	}		
-	}) 
-
+	})   
+ 
 		$(document).ready(function(){	
 		    $('#accountChange').change(function(){
 		    	
@@ -109,11 +123,12 @@
 		            		accountChange: 'Y'
 		            	},
 		            	success : function(){
-		            		alert('모임원 및 통장 변동 알림이 설정되었습니다.')
+		            		$("#normalBody p").html('모임원 및 통장 변동 알림이 설정되었습니다.');
+		            		$("#normal").modal('show');
 		            	}, error : function(){
-		            		alert('문제가 생겼습니다. 다시 시도해주세요.')
+		            		$("#error").modal('show');		            		
 		            	}
-		            })
+		            }) 
 		        }else{
 		            $.ajax({
 		            	url : '${ pageContext.request.contextPath }/participant/notify/accountChange',
@@ -123,9 +138,10 @@
 		            		accountChange: "N",
 		            	},
 		            	success : function(){
-		            		alert('모임원 및 통장 변동 알림이 해제되었습니다.')
+		            		$("#normalBody p").html('모임원 및 통장 변동 알림이 해제되었습니다.');
+		            		$("#normal").modal('show');		            		
 		            	}, error : function(){
-		            		alert('문제가 생겼습니다. 다시 시도해주세요.')
+		            		$("#error").modal('show');			            		
 		            	}
 		            })
 		        }
@@ -143,9 +159,10 @@
 		            		transfer: 'Y'
 		            	},
 		            	success : function(){
-		            		alert('입출금 알림이 설정되었습니다.')
+		            		$("#normalBody p").html('입출금 알림이 설정되었습니다.');
+		            		$("#normal").modal('show');		            		
 		            	}, error : function(){
-		            		alert('문제가 생겼습니다. 다시 시도해주세요.')
+		            		$("#error").modal('show');	
 		            	}
 		            })
 		        }else{
@@ -157,9 +174,10 @@
 		            		transfer: 'N'
 		            	},
 		            	success : function(){
-		            		alert('입출금 알림이 해제되었습니다.')
+		            		$("#normalBody p").html('입출금 알림이 해제되었습니다.');
+		            		$("#normal").modal('show');			            		
 		            	}, error : function(){
-		            		alert('문제가 생겼습니다. 다시 시도해주세요.')
+		            		$("#error").modal('show');	
 		            	}
 		            })
 		        }
@@ -169,26 +187,31 @@
 	 	  $(document).ready(function(){
 		    $('#depositDate').change(function(){
 		        if($('#depositDate').is(":checked")){
-		        	var regularDay = prompt("알림을 보낼 회비 입금일을 입력하세요"+"");
-		        	if(regularDay !== null){
+		        	/* var regularDay = prompt("알림을 보낼 회비 입금일을 입력하세요"+""); */
+		        	$('#forDepositDateInput').modal('show');
+		        	
+		        	$("#oBtnForDepositDateInput").click(function(){
 			        	$.ajax({
 			            	url : '${ pageContext.request.contextPath }/participant/notify/depositDateNotiChangeY',
 			            	type : 'post',
 			            	data : {
 			            		accountNo : ${gathering.accountNo},
 			            		depositDate: 'Y',
-			            		regularDay : regularDay
+			            		regularDay : $('#regularDay').val()
 			            	},
 			            	success : function(){
-			            		alert('회비 입금일 정기알림이 설정되었습니다.');
+			            		$("#normalBody p").html('회비 입금일 정기알림이 설정되었습니다.');
+			            		$("#normal").modal('show');	
 			            	}, error : function(){
-			            		alert('문제가 생겼습니다. 다시 시도해주세요.');
+			            		/* alert('문제가 생겼습니다. 다시 시도해주세요.'); */
 			            	}
 			            })
-		        	}else{
-		        		alert("잘못된 입력입니다.");
-		        	}
-		        }else{
+			            $('#depositDate').prop("checked", true);
+			        	$('#forDepositDateInput').modal('hide');
+			            return false;
+			        })
+		    	   	$('#depositDate').prop("checked", false);
+		        }else{ 
 		        	$.ajax({
 		            	url : '${ pageContext.request.contextPath }/participant/notify/depositDateNotiChangeN',
 		            	type : 'post',
@@ -197,9 +220,10 @@
 		            		depositDate: 'N'
 		            	},
 		            	success : function(){
-		            		alert('회비 입금일 정기알림이 해제되었습니다.');
+		            		$("#normalBody p").html('회비 입금일 정기알림이 해제되었습니다.');
+		            		$("#normal").modal('show');			            		
 		            	}, error : function(){
-		            		alert('문제가 생겼습니다. 다시 시도해주세요.');
+		            		$("#error").modal('show');	
 		            	}
 		            })
 		        }
@@ -224,10 +248,12 @@
             	success : function(data){
             		$('#terminateChangeBtnDiv').empty();
             		$('#terminateChangeBtnDiv').html(data);
-            		alert('모임통장이 사용 종료 신청이 완료되었습니다. 3일 후 모든 정보가 삭제됩니다. 취소하시려면 종료 취소 버튼을 눌러주세요.');
+            		
+            		$("#normalBody p").html('모임통장이 사용 종료 신청이 완료되었습니다.<br>3일 후 모든 정보가 삭제됩니다.<br>취소하시려면 종료 취소 버튼을 눌러주세요.');
+            		$("#normal").modal('show');		            		
             		
             	}, error : function(){
-            		alert('문제가 생겼습니다. 다시 시도해주세요.');
+            		$("#error").modal('show');		
             	}
             })
 	    })
@@ -243,12 +269,12 @@
             	data : {
             		accountNo : ${gathering.accountNo},
             		id : '${gathering.id}'
-            	},
+            	}, 
             	success : function(data){	           
             		$('#terminateChangeBtnDiv').empty;
             		$('#terminateChangeBtnDiv').html(data); 			       		
             	}, error : function(){
-            		alert('문제가 생겼습니다. 다시 시도해주세요.');
+            		$("#error").modal('show');	
             	}
             })
         })
@@ -278,7 +304,7 @@
   					<td>입출금 알림</td> 					
   					<td>					 
 	  					<label class="switch">
-						  <input type="checkbox" id="accountChange">
+						  <input type="checkbox" id="transfer">
 						  <span class="slider round"></span>
 						</label>
 					</td> 					
@@ -287,7 +313,7 @@
   					<td>회비 입금일 정기알림</td> 					
   					<td>					 
 	  					<label class="switch">
-						  <input type="checkbox" id="accountChange">
+						  <input type="checkbox" id="depositDate">
 						  <span class="slider round"></span>
 						</label>
 					</td> 					
@@ -305,17 +331,84 @@
 		  				<li>현재 모임통장은 사용 중입니다.</li>
 		 			<c:if test="${gathering.id == loginVO.id }">
 		 				<li>종료하시려면 아래 사용 종료 버튼을 눌러주세요.</li>
-		 				<button id="terminateBtn" class="terminateChangeBtn btn btn-primary button mt-3">모임통장 사용 종료</button>
+		 				<button id="terminateBtn" class="terminateChangeBtn btn btn-primary button mt-3" style="border-color:#27B2A5;background-color:#27B2A5;">모임통장 사용 종료</button>
 		 			</c:if>
 		 			</ul>
 		 		</c:when>
 		 		<c:otherwise>
 				  	<ul class="list-unstyled check">
 		  				<li>모임통장은 ${scheduledEndVO.endDate}에 종료 예정입니다.</li>		 		
-			 			<c:if test="${gathering.id == loginVO.id }"><button id="terminateCancelBtn" type="button" class="terminateChangeBtn btn btn-primary button  mt-3">종료 취소</button></c:if>	
+			 			<c:if test="${gathering.id == loginVO.id }"><button id="terminateCancelBtn" type="button" class="terminateChangeBtn btn btn-primary button  mt-3" style="border-color:#27B2A5;background-color:#27B2A5;">종료 취소</button></c:if>	
 		 			</ul>
 		 		</c:otherwise>
 	  		</c:choose>
   		</div>
 	</div>
 
+	<!-- !!!!모달!!!! -->
+	
+	<!-- 회비 입금일 입력 받기 -->
+	<div class="modal" tabindex="-1" id="forDepositDateInput">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title">정기적으로 알림을 받을 날짜를 선택해주세요</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div class="modal-body text-center">
+	        <select id="regularDay" name="regularDay" style="width:80px;">
+	        	<c:forEach var="i" begin="1" end="31">
+	        		<option>${i}</option>
+	        	</c:forEach>
+	        </select>
+	        	일
+	      </div>
+	      <div class="modal-footer">
+	        <button id="xBtnForDepositDateInput" type="button" class="btn btn-secondary" data-dismiss="modal">취소</button>
+	        <button id="oBtnForDepositDateInput" type="button" class="btn btn-primary" style="border-color:#27B2A5;background-color:#27B2A5;">확인</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>	
+	
+	<!-- 공통 모달(알림 설정 확인 메세지) -->
+	<div class="modal" tabindex="-1" id="normal">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 id="normalTitle" class="modal-title">변경 완료</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div id="normalBody" class="modal-body">
+	        <p></p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal" style="border-color:#27B2A5;background-color:#27B2A5;">확인</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>
+	
+	<!-- 에러 발생 모달 -->
+	<div class="modal" tabindex="-1" id="error">
+	  <div class="modal-dialog">
+	    <div class="modal-content">
+	      <div class="modal-header">
+	        <h5 class="modal-title">문제가 발생하였습니다.</h5>
+	        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+	          <span aria-hidden="true">&times;</span>
+	        </button>
+	      </div>
+	      <div id="normalBody" class="modal-body">
+	        <p>다시 시도해주세요.</p>
+	      </div>
+	      <div class="modal-footer">
+	        <button type="button" class="btn btn-secondary" data-dismiss="modal" style="border-color:#27B2A5;background-color:#27B2A5;">확인</button>
+	      </div>
+	    </div>
+	  </div>
+	</div>	

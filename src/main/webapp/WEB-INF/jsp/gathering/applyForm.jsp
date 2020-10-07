@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -17,7 +19,7 @@
         <div class="container">
           <div class="row slider-text align-items-center justify-content-center text-center">
             <div class="col-md-7 col-sm-12 element-animate">
-              <h1 class="text-white">모임통장 신청</h1>
+              <h1 class="text-white">모임통장 전환</h1>
             </div>
           </div>
         </div>
@@ -28,161 +30,91 @@
     <section class="section">
       <div class="container">
         <div class="row mb-5 justify-content-center">
-          <div class="col-md-8 order-lg-1">
+          <div class="col-md-9 order-lg-1"> 
+	
+	
+	
+		<h3 id="transaction" class="table-title">모임통장 전환</h3>			
+				  <div>			
+				  	<form method="post" name="aForm">
+				  		<table class="transferForm">
+				  			<tr>
+				  				<th style="width:300px;">모임통장으로 전환할 계좌</th>
+				  				<td>
+									<select name="accountNo" class="custom-select mb-2 form-control form-control-lg" id="validationCustom01" required>
+							        	<c:forEach items="${ accountList }" var="account" varStatus="loop">
+							        		<option value="${ account.accountNo }">${fn:substring(account.accountNo, 0, 3)}-${fn:substring(account.accountNo, 3, 9)}-${fn:substring(account.accountNo, 9, 14)} ${ account.productName }
+							        			&nbsp;잔액 <fmt:formatNumber value="${account.balance}" pattern="#,###.##" />원
+							        		</option>							      		
+							      		</c:forEach>
+							     	</select>	
+							     	<br>	
+							     	<p>※모임통장으로 이용불가능 입출금 계좌</p>
+							     	<p>: 대출 이용 계좌, 비활성 계좌, 거래제한 계좌</p>	  					
+				  				</td>
+				  			</tr>
+				  			<tr>
+				  				<th>
+				  					계좌 비밀번호
+				  				</th>
+				  				<td><input type="password" name="password" placeholder="비밀번호 4자리를 입력하세요." style="width:345px;" class="form-control form-control-lg"></td>
+				  			</tr>				 
+				  			<tr>
+				  				<th>모임통장 이름</th>
+				  				<td>
+							      <input type="text" name="name" class="form-control  form-control-lg" id="validationCustom03" 
+							      			placeholder="멤버들과 함께 볼 계좌 이름을 지어주세요." required>
+				  				</td>
+				  			</tr>
+				  			<tr>
+				  				<th>모임태그(최대 2개)</th>
+				  				<td>
+									<input type="checkbox" id="tag1" name="tag" value="1">
+									<label for="vehicle1">가족/생활비<img src="${ pageContext.request.contextPath }/resources/img/tag/1.svg" class="ml-1"></label><br>
+									<input type="checkbox" id="tag2" name="tag" value="2">
+									<label for="vehicle2">데이트<img src="${ pageContext.request.contextPath }/resources/img/tag/2.svg" class="ml-1"></label><br>
+									<input type="checkbox" id="tag3" name="tag" value="3">
+									<label for="vehicle3">팬모임<img src="${ pageContext.request.contextPath }/resources/img/tag/3.svg" class="ml-1"></label><br>
+									<input type="checkbox" id="tag4" name="tag" value="4">
+									<label for="vehicle3">공연/전시<img src="${ pageContext.request.contextPath }/resources/img/tag/4.svg" class="ml-1"></label><br>
+									<input type="checkbox" id="tag5" name="tag" value="5">
+									<label for="vehicle3">레저/스포츠<img src="${ pageContext.request.contextPath }/resources/img/tag/5.svg" class="ml-1"></label><br>
+									<input type="checkbox" id="tag6" name="tag" value="6">
+									<label for="vehicle3">여행<img src="${ pageContext.request.contextPath }/resources/img/tag/6.svg" class="ml-1"></label><br>
+									<input type="checkbox" id="tag7" name="tag" value="7">
+									<label for="vehicle3">학교/동아리<img src="${ pageContext.request.contextPath }/resources/img/tag/7.svg" class="ml-1"></label><br>
+									<input type="checkbox" id="tag8" name="tag" value="8">
+									<label for="vehicle3">회사/팀<img src="${ pageContext.request.contextPath }/resources/img/tag/8.svg" class="ml-1"></label><br>
+									<input type="checkbox" id="tag9" name="tag" value="9">
+									<label for="vehicle3">스터디<img src="${ pageContext.request.contextPath }/resources/img/tag/9.svg" class="ml-1"></label><br>
+									<input type="checkbox" id="tag10" name="tag" value="10">
+									<label for="vehicle3">친목<img src="${ pageContext.request.contextPath }/resources/img/tag/10.svg" class="ml-1"></label><br>	
+				  				</td>
+				  			</tr>	
+				  			<tr>
+				  				<th>모임통장 이용약관</th>
+				  				<td>
+							      <input type="checkbox" value="" id="invalidCheck" required
+							      				data-toggle="modal" data-target="#myModal">
+							      <label>본인은 위 안내에 대해 확인하고 이해합니다.</label> 
+				  				</td>
+				  			</tr>				  						  			
+				  		</table>
+					  	<div class="d-flex jusify-content-center">
+					  		<button type="button" class="btn btn-primary button transferFormSubmit" id="applyBtn" style="margin-left:auto;margin-right:2px">확인</button>
+					  		<button type="button" class="btn btn-primary button transferFormSubmit" onclick = "location.href = '${ pageContext.request.contextPath }/' " style="margin-left:2px;margin-right:auto;background-color:#6e7277;border-color:#6e7277;">취소</button>
+					  	</div>
+				  	</form>
+				  </div>  	
 
-<%-- 			<form method="post" name="aForm">
-			  <table>
-			  	<tr>
-			  		<th>하나은행 입출금계좌</th>
-		  			<td>
-		  				<select name="accountNo" id="validationCustom01" required>
-		  						<option>모임통장으로 사용할 계좌를 선택해 주세요</option>
-					        <c:forEach items="${ accountList }" var="account" varStatus="loop">
-					        	<option value="${ account.accountNo }">${ account.accountNo } ${ account.productName }</option>
-					      	</c:forEach>
-					   </select>
-					   <p class="mb-3">모임통장으로 이용불가능 입출금 계좌 : 대출 이용 계좌, 비활성 계좌, 거래제한 계좌</p>
-		  			</td>
-			  	</tr>
-			  	
-			  	<tr>
-			  		<th>계좌 비밀번호</th>
-		  			<td>
-						<input type="password" name="password" id="validationCustom02" placeholder="선택한 계좌의 비밀번호를 입력해주세요" required>
-		  			</td>
-			  	</tr>
-			  	
-			  	<tr>
-			  		<th>모임통장 이름</th>
-		  			<td>
-			      <input type="text" name="name" id="validationCustom03" 
-			      			placeholder="멤버들과 함께 볼 계좌 이름을 지어주세요" required>
-		  			</td>
-			  	</tr>	
-			  	
-			  	<tr>
-			  		<th>모임 태그</th>
-			  		<td>
-			  			<c:forEach items="${tagList}" var="tag" varStatus="loop">
-			  				<input type="checkbox" name="tag" value="${ tag.code }" placeholder="모임 성격에 맞는 태그를 최대 2개까지 선택할 수 있습니다.">
-							<label for="vehicle1">${tag.codeName}</label><br>	
-			  			</c:forEach>
-			  		</td>
-			  	</tr>
-
-				<tr>
-					<td>
-						<input type="checkbox" value="" id="invalidCheck" required
-				      				data-toggle="modal" data-target="#myModal">
-				      	<label class="form-check-label" for="invalidCheck">
-				       	약관에 동의
-				      	</label>
-					</td>
-				</tr>
-			  
-			  </table>
-			  <button type="button" class="btn btn-primary button" id="applyBtn" >신청</button>
-			</form> --%>
 	
-	
-	
-		<form method="post" name="aForm">
-			<div class="form-row">
-			  	<div class="col-md-12 mb-5">
-			  	 <p class="text-uppercase heading mb-3">모임통장으로 사용할 계좌를 선택해 주세요</p>
-			      <select name="accountNo" class="custom-select" id="validationCustom01" required>
-			        <c:forEach items="${ accountList }" var="account" varStatus="loop">
-			        	<option value="${ account.accountNo }">${ account.accountNo } ${ account.productName }</option>
-			      	</c:forEach>
-			      </select>
-			      <div class="invalid-feedback">
-					모임통장으로 전환할 입출금 계좌를 선택해주세요!
-			      </div>
-			      
-			  	<div id="selectAccount"></div>
-			  </div>			  
-			 </div>
-			 
-			  <div class="form-row">
-			  	<div class="col-md-12 mb-5">
-			  	 <p class="text-uppercase heading mb-3">선택한 계좌의 비밀번호를 입력해주세요</p>
-			      <input type="password" name="password" class="form-control" id="validationCustom02" required>
-			      <div class="invalid-feedback">
-					계좌 비밀번호를 입력해주세요!
-			      </div>
-			      
-			  	<div id="selectAccount"></div>
-			  </div>			  
-			 </div>			 
-			  
-			  <div class="form-row">   
-			    <div class="col-md-12 mb-5">
-			    <p class="text-uppercase heading mb-3">멤버들과 함께 볼 계좌 이름을 지어주세요</p>
-			      <input type="text" name="name" class="form-control" id="validationCustom03" 
-			      			placeholder="계좌이름" required>
-			      <div class="invalid-feedback">
-					모임통장 이름을 설정해주세요!
-			      </div>
-			    </div>
-			  </div> 
-			
-			
-			  <div class="form-row">   
-			    <div class="col-md-12 mb-4">
-			     <p class="text-uppercase heading mb-3">모임 성격에 맞는 태그를 최대 2개까지 선택할 수 있습니다</p>
-					<input type="checkbox" id="tag1" name="tag" value="1">
-					<label for="vehicle1">가족/생활비</label><br>
-					<input type="checkbox" id="tag2" name="tag" value="2">
-					<label for="vehicle2">데이트</label><br>
-					<input type="checkbox" id="tag3" name="tag" value="3">
-					<label for="vehicle3">팬모임</label><br>
-					<input type="checkbox" id="tag4" name="tag" value="4">
-					<label for="vehicle3">공연/전시</label><br>
-					<input type="checkbox" id="tag5" name="tag" value="5">
-					<label for="vehicle3">레저/스포츠</label><br>
-					<input type="checkbox" id="tag6" name="tag" value="6">
-					<label for="vehicle3">여행</label><br>
-					<input type="checkbox" id="tag7" name="tag" value="7">
-					<label for="vehicle3">학교/동아리</label><br>
-					<input type="checkbox" id="tag8" name="tag" value="8">
-					<label for="vehicle3">회사/팀</label><br>
-					<input type="checkbox" id="tag9" name="tag" value="9">
-					<label for="vehicle3">스터디</label><br>
-					<input type="checkbox" id="tag10" name="tag" value="10">
-					<label for="vehicle3">친목</label><br>																								
-			      <div class="invalid-feedback">
-					모임 태그를 설정해주세요!
-			      </div>
-			    </div>
-			  </div> 
-			  
-			  <div class="form-row">
-			  	<div class="col-md-12 mb-1">
-			  		<p class="text-uppercase heading mb-3">모임통장 이용 약관을 읽고 동의해주세요</p>
-			  	</div>
-			  </div>  
-			  <div class="form-group">
-				 <div class="form-check">
-				      <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required
-				      				data-toggle="modal" data-target="#myModal">
-				      <label class="form-check-label" for="invalidCheck">
-				       	동의합니다.
-				      </label>
-				      <div class="invalid-feedback">
-						제출하시기 전 이용약관에 동의해주세요!
-				      </div>
-				    </div>
-				    <p class="mb-3">※모임통장으로 이용불가능 입출금 계좌 : 대출 이용 계좌, 비활성 계좌, 거래제한 계좌</p>
-				  	<!-- <button class="btn btn-primary button" id="applyBtn">신청</button> -->
-				  	<button type="button" class="btn btn-primary button" id="applyBtn" >신청</button>
-				  </div>
-			</form>
 	
 			
 		  </div>
 		</div>				
       </div>
     </section>
+
 
 	<!-- footer BEGIN -->
 		<jsp:include page="/WEB-INF/jsp/include/footer.jsp" /> 
@@ -220,26 +152,7 @@
 	
 
 	<script>
- /* 	// Example starter JavaScript for disabling form submissions if there are invalid fields
-	(function() {
-	  'use strict';
-	  window.addEventListener('load', function() {
-	    // Fetch all the forms we want to apply custom Bootstrap validation styles to
-	    var forms = document.getElementsByClassName('needs-validation');
-	    // Loop over them and prevent submission
-	    var validation = Array.prototype.filter.call(forms, function(form) {
-	      form.addEventListener('submit', function(event) {
-	        if (form.checkValidity() === false) {
-	          event.preventDefault();
-	          event.stopPropagation();
-	        }
-	        form.classList.add('was-validated');
-	      }, false);
-	    });
-	  }, false);
-	})(); */ 
 
-	
 		//모임통장 신청폼 넘기는 함수
 		function submitForm(){
 			let accountNo = document.aForm.accountNo.value;
@@ -286,11 +199,11 @@
 				},
 				success: function(addr){
 					console.log("신청폼 보내기");
-					alert("준비해라");
+/* 					alert("준비해라");
 					alert(addr);
-					alert(addr.substr(1, 16));
+					alert(addr.substr(1, 16));*/
 					let accountNo = document.aForm.accountNo.value;
-					let address = "${pageContext.request.contextPath}" + addr.substr(1, 16) + "/" + accountNo;
+					let address = "${pageContext.request.contextPath}" + addr.substr(1, 16) + "/" + accountNo; 
 					location.href =  address;
 				},error: function(){
 					alert("신청폼을 전송하는 데 문제가 생겼습니다. 다시 시도해주시기 바랍니다.");
@@ -303,7 +216,6 @@
 		
 		//비밀번호 일치 여부
 		$('#applyBtn').click(function(){
-			alert('!!!')
 			let password = document.aForm.password.value;
 			let accountNo = document.aForm.accountNo.value;
 			var rtn = true; 
@@ -319,7 +231,7 @@
 					data = JSON.parse(data);
 					console.log("[" + data + "]");
 					console.log("[" + data.trim() + "]");
-					alert(typeof(data));
+/* 					alert(typeof(data)); */
 					if(data == 'no'){
 						alert("비밀번호가 일치하지 않습니다.")
 						rtn = false; 

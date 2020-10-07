@@ -23,7 +23,7 @@
         <div class="container">
           <div class="row slider-text align-items-center justify-content-center text-center">
             <div class="col-md-7 col-sm-12 element-animate">
-              <h1 class="text-white">이체</h1>
+              <h1 class="text-white">계좌이체</h1>
             </div>
           </div>
         </div>
@@ -38,7 +38,8 @@
 			
 			<h2 class="text-uppercase heading border-bottom mb-4">이체 완료</h2>
             <p class="mb-3">이체가 완료되었습니다.</p>
-            <p class="mb-3">타행 계좌로 이체 시 입금은행의 사정에 따라 해당 계좌의 입금이 다소 지연됦 수 있습니다.</p>
+            <p class="mb-3">타행 계좌로 이체 시 입금은행의 사정에 따라 </p>
+            <p class="mb-3">해당 계좌의 입금이 다소 지연될 수 있습니다.</p>
             <button class="btn btn-primary" onclick = "location.href = '${ pageContext.request.contextPath }/transaction/transfer/${gatheringVO.safeAccountNo}' ">추가 이체하기</button>
 			</div>
 			<%-- <table class="table">

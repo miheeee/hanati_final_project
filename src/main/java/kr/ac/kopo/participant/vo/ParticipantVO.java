@@ -12,6 +12,7 @@ public class ParticipantVO {
 	private String accountChange;
 	private String transfer;
 	private String depositDate;
+	private String registerDate;
 	
 	public String getAccountNo() {
 		return accountNo;
@@ -55,11 +56,18 @@ public class ParticipantVO {
 	public void setDepositDate(String depositDate) {
 		this.depositDate = depositDate;
 	}
+	public String getRegisterDate() {
+		return registerDate;
+	}
+	public void setRegisterDate(String registerDate) {
+		this.registerDate = registerDate;
+	}
+	
 	@Override
 	public String toString() {
 		return "ParticipantVO [accountNo=" + accountNo + ", id=" + id + ", type=" + type + ", name=" + name
 				+ ", accountChange=" + accountChange + ", transfer=" + transfer + ", depositDate=" + depositDate
-				+ "]";
+				+ ", registerDate=" + registerDate + "]";
 	}
-	
+
 }

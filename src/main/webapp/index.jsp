@@ -45,13 +45,12 @@
         <div class="row align-items-center">
           <div class="col-md-6 pr-lg-5 mb-5 mb-md-0  element-animate">
             <div class="pr-lg-5">
-              <h2 class="text-uppercase heading border-bottom mb-4 text-left">We Are Expert in <br>Construction Field</h2>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ullam similique repellat dignissimos, omnis at ducimus pariatur odio praesentium eveniet porro sit quod, sequi unde atque magnam voluptate quae voluptatum. Delectus.</p>
-              <p>At sed impedit, ab a officia blanditiis, fuga commodi delectus veniam architecto in nihil numquam eum maiores. Amet nihil, dolorum sit vitae fugit maxime earum optio culpa eum. Voluptates, labore.</p>
+              <h2 class="text-uppercase heading border-bottom mb-4 text-left"> Make One's <br>Invaluable Momemt</h2>
+              <p>모두의 기쁨, 그 하나를 위하여<br>친구, 가족, 연인과의 만남에서 소중한 순간에만 집중할 수 있도록  하나모임이 노력하겠습니다.</p>
             </div>
           </div>
           <div class="col-md-6  element-animate">
-            <img src="${ pageContext.request.contextPath }/resources/img/work_thumb_1.jpg" alt="" class="img-fluid">
+            <img src="${ pageContext.request.contextPath }/resources/img/2977989.jpg" alt="" class="img-fluid">
           </div>
         </div>
       </div>
@@ -61,54 +60,46 @@
       <div class="container">
         <div class="row justify-content-center mb-5 element-animate">
           <div class="col-md-8 text-center">
-            <h2 class="text-uppercase heading border-bottom mb-4">Recent Projects</h2>
-            <p class="mb-3 lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi unde impedit, necessitatibus, soluta sit quam minima expedita atque corrupti reiciendis.</p>
-            <p><a href="works.html" class="btn btn-primary">See All Projects</a></p>
-          </div>
+            <h2 class="text-uppercase heading border-bottom mb-4">Recent News</h2>
+		  </div>
         </div>
 
         <div class="row no-gutters">
           <div class="col-md-4 element-animate">
             <a href="works-single.html" class="link-thumbnail">
-              <h3>House Renovation</h3>
               <span class="ion-plus icon"></span>
-              <img src="${ pageContext.request.contextPath }/resources/img/work_thumb_1.jpg" alt="Image placeholder" class="img-fluid">
+              <img src="${ pageContext.request.contextPath }/resources/img/20200805.jpg" alt="Image placeholder" class="img-fluid">
             </a>
           </div>
           <div class="col-md-4 element-animate">
             <a href="works-single.html" class="link-thumbnail">
-              <h3>General Construction Building</h3>
               <span class="ion-plus icon"></span>
-              <img src="${ pageContext.request.contextPath }/resources/img/work_thumb_2.jpg" alt="Image placeholder" class="img-fluid">
+              <img src="${ pageContext.request.contextPath }/resources/img/20200608.jpg" alt="Image placeholder" class="img-fluid" style="  background-size: cover;background-position: center;background-repeat: no-repeat;">
             </a>
           </div>
           <div class="col-md-4 element-animate">
             <a href="works-single.html" class="link-thumbnail">
-              <h3>Pre-Construction</h3>
               <span class="ion-plus icon"></span>
-              <img src="${ pageContext.request.contextPath }/resources/img/work_thumb_3.jpg" alt="Image placeholder" class="img-fluid">
+              <img src="${ pageContext.request.contextPath }/resources/img/20200524.jpg" alt="Image placeholder" class="img-fluid" style="  background-size: cover;background-position: center;background-repeat: no-repeat;">
             </a>
           </div>
 
           <div class="col-md-4 element-animate">
             <a href="works-single.html" class="link-thumbnail">
-              <h3>House Renovation</h3>
               <span class="ion-plus icon"></span>
-              <img src="${ pageContext.request.contextPath }/resources/img/work_thumb_3.jpg" alt="Image placeholder" class="img-fluid">
+              <img src="${ pageContext.request.contextPath }/resources/img/5836_7144_2310.jpg" alt="Image placeholder" class="img-fluid">
             </a>
           </div>
           <div class="col-md-4 element-animate">
             <a href="works-single.html" class="link-thumbnail">
-              <h3>General Construction Building</h3>
               <span class="ion-plus icon"></span>
-              <img src="${ pageContext.request.contextPath }/resources/img/work_thumb_1.jpg" alt="Image placeholder" class="img-fluid">
+              <img src="${ pageContext.request.contextPath }/resources/img/20200707.jpg" alt="Image placeholder" class="img-fluid" style="  background-size: cover;background-position: center;background-repeat: no-repeat;">
             </a>
           </div>
           <div class="col-md-4 element-animate">
             <a href="works-single.html" class="link-thumbnail">
-              <h3>Pre-Construction</h3>
               <span class="ion-plus icon"></span>
-              <img src="${ pageContext.request.contextPath }/resources/img/work_thumb_2.jpg" alt="Image placeholder" class="img-fluid">
+              <img src="${ pageContext.request.contextPath }/resources/img/20200706.jpg" alt="Image placeholder" class="img-fluid" style="  background-size: cover;background-position: center;background-repeat: no-repeat;">
             </a>
           </div>
 
@@ -118,149 +109,7 @@
     <!-- END section -->
 
   
-    <section class="section bg-light">
-      <div class="container">
-        
-        <!-- 제목 시작 -->
-        <div class="row justify-content-center mb-5 element-animate">
-          <div class="col-md-8 text-center mb-5">
-            <h2 class="text-uppercase heading border-bottom mb-4">Our News</h2>
-            <p class="mb-0 lead">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi unde impedit, necessitatibus, soluta sit quam minima expedita atque corrupti reiciendis.</p>
-          </div>
-        </div>
-        <!-- 제목 끝-->
-        
-        <!-- 콘텐츠 시작 -->
-        <div class="row element-animate">
-        <!-- 시작 slider -->
-          <div class="major-caousel js-carousel-1 owl-carousel">
-            <!-- 1번째 슬라이더 -->
-            <div>
-              <div class="media d-block media-custom text-left">
-                <img src="img/work_thumb_1.jpg" alt="Image Placeholder" class="img-fluid">
-                <div class="media-body">
-                  <span class="meta-post">December 2, 2017</span>
-                  <h3 class="mt-0 text-black"><a href="#" class="text-black">Lorem ipsum dolor sit amet elit</a></h3>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                  <p class="clearfix">
-                    <a href="#" class="float-left">Read more</a>
-                    <a href="#" class="float-right meta-chat"><span class="ion-chatbubble"></span> 8</a>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <!--  -->
-            <!-- 2번째 슬라이더 -->
-            <div>
-              <div class="media d-block media-custom text-left">
-                <img src="${ pageContext.request.contextPath }/resources/img/work_thumb_2.jpg" alt="Image Placeholder" class="img-fluid">
-                <div class="media-body">
-                  <span class="meta-post">December 2, 2017</span>
-                  <h3 class="mt-0 text-black"><a href="#" class="text-black">Lorem ipsum dolor sit amet elit</a></h3>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                  <p class="clearfix">
-                    <a href="#" class="float-left">Read more</a>
-                    <a href="#" class="float-right meta-chat"><span class="ion-chatbubble"></span> 2</a>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <!--  -->
-            <!-- 3번째 슬라이더 -->
-            <div>
-              <div class="media d-block media-custom text-left">
-                <img src="${ pageContext.request.contextPath }/resources/img/work_thumb_3.jpg" alt="Image Placeholder" class="img-fluid">
-                <div class="media-body">
-                  <span class="meta-post">December 2, 2017</span>
-                  <h3 class="mt-0 text-black"><a href="#" class="text-black">Lorem ipsum dolor sit amet elit</a></h3>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                  <p class="clearfix">
-                    <a href="#" class="float-left">Read more</a>
-                    <a href="#" class="float-right meta-chat"><span class="ion-chatbubble"></span> 5</a>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class="media d-block media-custom text-left">
-                <img src="${ pageContext.request.contextPath }/resources/img/work_thumb_1.jpg" alt="Image Placeholder" class="img-fluid">
-                <div class="media-body">
-                  <span class="meta-post">December 2, 2017</span>
-                  <h3 class="mt-0 text-black"><a href="#" class="text-black">Lorem ipsum dolor sit amet elit</a></h3>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                  <p class="clearfix">
-                    <a href="#" class="float-left">Read more</a>
-                    <a href="#" class="float-right meta-chat"><span class="ion-chatbubble"></span> 7</a>
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div>
-              <div class="media d-block media-custom text-left">
-                <img src="${ pageContext.request.contextPath }/resources/img/work_thumb_2.jpg" alt="Image Placeholder" class="img-fluid">
-                <div class="media-body">
-                  <span class="meta-post">December 2, 2017</span>
-                  <h3 class="mt-0 text-black"><a href="#" class="text-black">Lorem ipsum dolor sit amet elit</a></h3>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                  <p class="clearfix">
-                    <a href="#" class="float-left">Read more</a>
-                    <a href="#" class="float-right meta-chat"><span class="ion-chatbubble"></span> 1</a>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class="media d-block media-custom text-left">
-                <img src="${ pageContext.request.contextPath }/resources/img/work_thumb_3.jpg" alt="Image Placeholder" class="img-fluid">
-                <div class="media-body">
-                  <span class="meta-post">December 2, 2017</span>
-                  <h3 class="mt-0 text-black"><a href="#" class="text-black">Lorem ipsum dolor sit amet elit</a></h3>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                  <p class="clearfix">
-                    <a href="#" class="float-left">Read more</a>
-                    <a href="#" class="float-right meta-chat"><span class="ion-chatbubble"></span> 4</a>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class="media d-block media-custom text-left">
-                <img src="img/work_thumb_1.jpg" alt="Image Placeholder" class="img-fluid">
-                <div class="media-body">
-                  <span class="meta-post">December 2, 2017</span>
-                  <h3 class="mt-0 text-black"><a href="#" class="text-black">Lorem ipsum dolor sit amet elit</a></h3>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                  <p class="clearfix">
-                    <a href="#" class="float-left">Read more</a>
-                    <a href="#" class="float-right meta-chat"><span class="ion-chatbubble"></span> 12</a>
-                  </p>
-                </div>
-              </div>
-            </div>
-            <div>
-              <div class="media d-block media-custom text-left">
-                <img src="img/work_thumb_2.jpg" alt="Image Placeholder" class="img-fluid">
-                <div class="media-body">
-                  <span class="meta-post">December 2, 2017</span>
-                  <h3 class="mt-0 text-black"><a href="#" class="text-black">Lorem ipsum dolor sit amet elit</a></h3>
-                  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
-                  <p class="clearfix">
-                    <a href="#" class="float-left">Read more</a>
-                    <a href="#" class="float-right meta-chat"><span class="ion-chatbubble"></span> 14</a>
-                  </p>
-                </div>
-              </div>
-            </div>
-			<!--  -->
-          </div>
-          <!-- END slider -->
-        </div>
-        <<!-- 콘텐츠 끝 -->
-        
-      </div>
-    </section>
-    <!-- END section -->
+ 
 
 	<!-- footer BEGIN -->
 		<jsp:include page="/WEB-INF/jsp/include/footer.jsp" /> 

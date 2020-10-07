@@ -55,11 +55,12 @@
 			</tbody>
 		</table>			  		
   	</div>
-  	
-	<form id="excelForm" name="excelForm" method="post" action="${ pageContext.request.contextPath }/excelDownload">
-		<input type="hidden" name="safeAccountNo" value="${gathering.safeAccountNo}">
-		<input type="hidden" name="accountNo" value="${gathering.accountNo}">
-		<input type="hidden" name="id" value="${gathering.id}">
-		<input type="submit" class="excelDownBtn" value="거래내역 다운로드" />
-		<img alt="excel" src="${ pageContext.request.contextPath }/resources/img/excel-png.png" style="width:2em;height:2em;float:right;">
-	</form> 
+	 <c:if test="${gathering.id == loginVO.id }"> 	
+		<form id="excelForm" name="excelForm" method="post" action="${ pageContext.request.contextPath }/excelDownload">
+			<input type="hidden" name="safeAccountNo" value="${gathering.safeAccountNo}">
+			<input type="hidden" name="accountNo" value="${gathering.accountNo}">
+			<input type="hidden" name="id" value="${gathering.id}">
+			<input type="submit" class="excelDownBtn" value="거래내역 다운로드" />
+			<img alt="excel" src="${ pageContext.request.contextPath }/resources/img/excel-png.png" style="width:2em;height:2em;float:right;">
+		</form> 
+	</c:if>

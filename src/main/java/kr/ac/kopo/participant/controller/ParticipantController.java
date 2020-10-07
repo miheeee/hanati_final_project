@@ -183,7 +183,8 @@ public class ParticipantController {
 		
 		//인증번호 만료하기(삭제)
 		String url = request.getHeader("referer");
-		String code = url.split("/")[6];
+		String code = url.split("/")[5];
+
 		authenticationVO.setAuthenticationNum(code.substring(11));
 		authenticationVO.setSafeAccountNo(code.substring(0, 11));
 		authenticationService.expireAuthenticationNum(authenticationVO);

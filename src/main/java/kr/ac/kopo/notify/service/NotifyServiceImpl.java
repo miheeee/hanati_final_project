@@ -54,8 +54,11 @@ public class NotifyServiceImpl implements NotifyService{
 		for(MemberVO memberVO : memberList) {
 			System.out.println(memberVO);
 			System.out.println(msg);
-			smsSender.send(memberVO.getTel(), msg);
+			//smsSender.send(memberVO.getTel(), msg);
 		}
+		
+		smsSender.send("01099194276", msg);
+		
 	}
 	
 	/**
@@ -97,9 +100,10 @@ public class NotifyServiceImpl implements NotifyService{
 		for(MemberVO memberVO : memberList) {
 			System.out.println(memberVO.getTel());
 			System.out.println(msg);
-			smsSender.send(memberVO.getTel(), msg);
+			//smsSender.send(memberVO.getTel(), msg);
 		}
 		
+		smsSender.send("01099194276", msg);
 	}
 		
 		

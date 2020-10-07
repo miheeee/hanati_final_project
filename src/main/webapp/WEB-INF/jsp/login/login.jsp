@@ -12,7 +12,7 @@
 <!-- END header -->
     
     <section class="inner-page">
-      <div class="slider-item py-5" style="background-image: url('${ pageContext.request.contextPath }/resources/img/slider-1.jpg');">
+      <div class="slider-item py-5" style="background-image: url('${ pageContext.request.contextPath }/resources/img/slider-2.jpg');">
         
         <div class="container">
           <div class="row slider-text align-items-center justify-content-center text-center">

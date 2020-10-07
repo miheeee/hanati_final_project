@@ -65,10 +65,14 @@ public class MemberController {
 			if(dest == null) {
 				mav.setViewName("redirect:/");
 			}else {
-				if(dest.substring(dest.length()-3).equals("jpg")) {			//??처음 로그인할 때 dest가 왜 이런지 모르겠음
+				if(dest.substring(dest.length()-3).equals("jpg") || dest.substring(dest.length()-3).equals("ico")) {			//??처음 로그인할 때 dest가 왜 이런지 모르겠음
 					mav.setViewName("redirect:/");
 				}else {
-					mav.setViewName("redirect:" + dest);
+					if(dest.equals("/gathering/apply")) {
+						mav.setViewName("redirect:/");
+					}else {
+						mav.setViewName("redirect:" + dest);						
+					}
 				}
 			}
 			mav.addObject("loginVO", loginVO);

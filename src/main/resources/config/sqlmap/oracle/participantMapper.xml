@@ -17,7 +17,7 @@
 	
 	<!-- safeAccountNo로 모임원 정보 조회 -->
 	<select id="selectBySafeAccountNo" resultType="participantVO" parameterType="gatheringVO">
-		select account_no as accountNo, id, type, name
+		select account_no as accountNo, id, type, name, to_char(register_date, 'yyyy.mm.dd') as registerDate
 			from participant
 				where account_no in
 					(select account_no
@@ -38,7 +38,7 @@
 	
 	<!-- 계좌번호로 모임원 정보 조회 -->
 	<select id="selectByAccountNo" resultType="participantVO" parameterType="transactionVO"> 
-	select name, type
+	select name, type, to_char(register_date, 'yyyy.mm.dd') as registerDate, id
 			from participant
 				where account_no = #{accountNo}
 	</select>
